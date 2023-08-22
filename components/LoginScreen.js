@@ -25,7 +25,6 @@ const LoginScreen = ({ navigation }) => {
                     />
                     <TextInput
                         label="Email"
-                        secureTextEntry
                         onChangeText={text => setEmail(text)}
                         style={{ width: '80%', marginVertical: 10 }}
                     />
