@@ -26,13 +26,13 @@ const LoginScreen = ({ navigation }) => {
                     <TextInput
                         label="Email"
                         secureTextEntry
-                        onChangeText={text => setText(text)}
+                        onChangeText={text => setEmail(text)}
                         style={{ width: '80%', marginVertical: 10 }}
                     />
                     <TextInput
                         label="Password"
                         secureTextEntry
-                        onChangeText={text => setText(text)}
+                        onChangeText={text => setPassword(text)}
                         style={{ width: '80%', marginVertical: 10 }}
                     />
                     <Button
