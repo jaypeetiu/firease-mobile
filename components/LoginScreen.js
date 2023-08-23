@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        navigation.navigate('MainApp');
+        navigation.navigate('GetStarted');
     };
 
     return (

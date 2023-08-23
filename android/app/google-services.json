@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "296543121796",
+    "project_id": "firease-82ab9",
+    "storage_bucket": "firease-82ab9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296543121796:android:573b6d82ae63350201edd1",
+        "android_client_info": {
+          "package_name": "com.firease"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296543121796-0e5rtglu9glurklbhagv538l6rl3dd84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFG3kvxH1eaD1oRxPMxhDvFrFFeLP5LyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296543121796-0e5rtglu9glurklbhagv538l6rl3dd84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
