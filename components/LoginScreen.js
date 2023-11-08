@@ -21,23 +21,26 @@ const LoginScreen = ({ navigation }) => {
                     <Avatar.Image
                         size={150}
                         source={require('../assets/logo.png')}
-                        style={{padding: '50px', backgroundColor: '#000'}}
+                        style={{ padding: '50px', backgroundColor: '#000' }}
                     />
                     <TextInput
-                        label="Email"
-                        onChangeText={text => setEmail(text)}
-                        style={{ width: '80%', marginVertical: 10 }}
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={setEmail}
+                        style={styles.input}
                     />
                     <TextInput
-                        label="Password"
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
                         secureTextEntry
-                        onChangeText={text => setPassword(text)}
-                        style={{ width: '80%', marginVertical: 10 }}
+                        style={styles.input}
+                        textContentType="password"
                     />
                     <Button
                         mode="contained"
                         onPress={() => handleLogin()}
-                        style={{ width: '50%', backgroundColor: 'red' }}
+                        style={{ width: 200, backgroundColor: 'red', marginTop: 10 }}
                     >
                         Login
                     </Button>
@@ -51,6 +54,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#000',
+    },
+    input: {
+        height: 25,
+        margin: 5,
+        borderWidth: 1,
+        padding: 5,
+        fontSize: 12,
+        width: 300,
+        top: 5,
     },
 });
 

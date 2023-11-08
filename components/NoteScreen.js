@@ -3,9 +3,9 @@ import { Image, StyleSheet, View } from "react-native";
 import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";
 
-export default GuidelinesScreen = ({ navigation }) => {
+export default NoteScreen = ({ navigation }) => {
     const handleNext = () => {
-        navigation.navigate('NoteScreen');
+        navigation.navigate('Register');
     };
 
     return (
@@ -23,27 +23,25 @@ export default GuidelinesScreen = ({ navigation }) => {
                     variant="titleLarge"
                     style={{ alignSelf: 'center', color: '#000', textAlign: 'center', fontWeight: 'bold' }}
                 >
-                    GUIDELINES ON HOW TO USE THE APPLICATION
+                    NOTE TO ALL USERS BEFORE CREATING AND USING THE APPLICATION
                 </Text>
-                <Text
-                    variant="titleMedium"
-                    style={{ alignSelf: 'center', marginTop: '10%', borderWidth: 1, borderRadius: 20, padding: 10, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103' }}
-                >
-                    What is Inferno application and how to use?
-                </Text>
-                <Text
-                    variant="titleMedium"
-                    style={{ alignSelf: 'center', marginTop: '10%', margin: '5%', color: '#000', textAlign: 'justify', fontWeight: '700' }}
-                >
-                    The Inferno application is a fire emergency hotline. The user(s) can communicate with the fire stations by tapping the logo button without the hassle of calling the admin and specifying their emergency needs, you just need to send picture/ video for proof and evidence. In addition, the application has access to your GPS location.
-                </Text>
+                <View style={{ borderWidth: 1, borderColor: '#ffffff', marginTop: '10%' }}>
+                    <View style={{ borderWidth: 1, padding: 5, marginLeft: '2%', marginTop: '2%', paddingBottom: '2%', borderColor: '#ffffff' }}>
+                        <Text
+                            variant="titleSmall"
+                            style={{ alignSelf: 'center', marginTop: '5%', padding: 20, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103', marginHorizontal: '1%', height: 250 }}
+                        >
+                            This Programs objective is to help individuals in need by directing the user to the first step. Communication and action accelerate. It should be noted that this application is not for entertainment purposes.
+                        </Text>
+                    </View>
+                </View>
                 <Button
                     mode="contained"
                     style={{ width: '50%', backgroundColor: '#F78900', marginTop: 40, alignSelf: 'center', borderWidth: 2, borderColor: '#fff' }}
                     textColor="#fff"
                     onPress={() => handleNext()}
                 >
-                    NEXT
+                    REGISTER
                 </Button>
                 <Image source={require('../assets/wave.png')} style={styles.footerImage} />
                 <Image source={require('../assets/wave2.png')} style={styles.footerImage} />

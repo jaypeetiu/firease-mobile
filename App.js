@@ -8,6 +8,7 @@ import RegisterScreen from './components/RegisterScreen';
 import MainAppScreen from './components/MainAppScreen';
 import GetStartedScreen from './components/GetStartedScreen';
 import GuidelinesScreen from './components/GuidelinesScreen';
+import NoteScreen from './components/NoteScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,8 +18,9 @@ export default function App() {
       <Stack.Navigator initialRouteName="GetStarted">
         <Stack.Screen name="GetStarted" component={GetStartedScreen} options={{ headerShown: false}} />
         <Stack.Screen name="Guidelines" component={GuidelinesScreen} options={{ headerShown: false}} />
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="NoteScreen" component={NoteScreen} options={{ headerShown: false}} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="MainApp" component={MainAppScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
