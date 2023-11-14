@@ -1,4 +1,5 @@
-import react from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import react, { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";

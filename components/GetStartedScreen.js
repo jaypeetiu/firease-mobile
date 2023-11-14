@@ -1,9 +1,11 @@
-import react from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import react, { useEffect } from "react";
 import { Image, View } from "react-native";
 import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";
 
-export default GetStartedScreen = ({navigation}) => {
+export default GetStartedScreen = ({ navigation }) => {
+
     const handleNext = () => {
         navigation.navigate('Guidelines');
     };
@@ -11,7 +13,7 @@ export default GetStartedScreen = ({navigation}) => {
     return (
         <View style={{ backgroundColor: '#000', height: '100%' }}>
             <Appbar.Header style={{ backgroundColor: '#F78900' }}>
-                <Appbar.Content title={"Welcome"} color="#000"/>
+                <Appbar.Content title={"Welcome"} color="#000" />
             </Appbar.Header>
             <Avatar.Image
                 size={150}
@@ -30,7 +32,7 @@ export default GetStartedScreen = ({navigation}) => {
                 mode="contained"
                 style={{ width: '50%', backgroundColor: '#9B0103', marginTop: 40, alignSelf: 'center' }}
                 textColor="#fff"
-                onPress={()=>handleNext()}
+                onPress={() => handleNext()}
             >
                 Get Started
             </Button>
