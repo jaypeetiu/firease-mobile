@@ -20,68 +20,64 @@ export default RegisterScreen = ({ navigation }) => {
 
     const hideDialog = () => setVisible(false);
 
-    const handleRegister = () => {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('password_confirmation', confirmPassword);
-        try {
-            axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
-            axios.defaults.headers.common = {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': window.csrf_token,
-            }
-            axios.post('auth/register', {
+    // const handleRegister = () => {
+    //     const formData = new FormData();
+    //     formData.append('name', name);
+    //     formData.append('email', email);
+    //     formData.append('password', password);
+    //     formData.append('password_confirmation', confirmPassword);
+    //     try {
+    //         axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+    //         axios.defaults.headers.common = {
+    //             'X-Requested-With': 'XMLHttpRequest',
+    //             'X-CSRF-TOKEN': window.csrf_token,
+    //         }
+    //         axios.post('auth/register', formData,
+    //             {
+    //                 headers: {
+    //                     'Content-Type': 'multipart/form-data',
+    //                 },
+    //             }).then((e) => {
+    //                 console.log(e.data.message);
+    //                 setMessage(e.data.message);
+    //                 showDialog();
+    //             }).catch((error) => {
+    //                 if (error.response) {
+    //                     // The request was made and the server responded with a status code
+    //                     console.error("Response data:", error.response.data);
+    //                     console.error("Response status:", error.response.status);
+    //                     console.error("Response headers:", error.response.headers);
+    //                     setMessage(error.response.data.errors.password);
+    //                     showDialog();
+    //                 } else if (error.request) {
+    //                     // The request was made but no response was received
+    //                     console.error("No response received, check your network connection.");
+    //                 } else {
+    //                     // Something happened in setting up the request
+    //                     console.error("Error message:", error.message);
+    //                 }
+    //             });
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+    const handleNext = () => {
+        navigation.navigate('AttachFile', {
+            data: {
                 'name': name,
                 'email': email,
                 'password': password,
                 'password_confirmation': confirmPassword,
-            }).then((e) => {
-                console.log(e.data.message);
-                setMessage(e.data.message);
-                showDialog();
-            }).catch((error) => {
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    console.error("Response data:", error.response.data);
-                    console.error("Response status:", error.response.status);
-                    console.error("Response headers:", error.response.headers);
-                    setMessage(error.response.data.errors.password);
-                    showDialog();
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    console.error("No response received, check your network connection.");
-                } else {
-                    // Something happened in setting up the request
-                    console.error("Error message:", error.message);
-                }
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const handleNext = () => {
+            }
+        });
+    }
+
+    const handleLogin = () => {
         navigation.navigate('Login');
     }
 
     return (
         <>
-            {/* <PaperProvider>
-                <View>
-                    <Portal>
-                        <Dialog visible={visible} onDismiss={hideDialog}>
-                            <Dialog.Title>Alert Message</Dialog.Title>
-                            <Dialog.Content>
-                                <Text variant="bodyMedium">{message}</Text>
-                            </Dialog.Content>
-                            <Dialog.Actions>
-                                <Button onPress={hideDialog}>Done</Button>
-                            </Dialog.Actions>
-                        </Dialog>
-                    </Portal>
-                </View>
-            </PaperProvider> */}
             <View style={styles.container}>
                 <View style={styles.content}>
                     <Text
@@ -139,12 +135,12 @@ export default RegisterScreen = ({ navigation }) => {
                             <Text variant="labelSmall" style={{ color: '#FFFFFF' }}>I agree with privacy and policy</Text>
                         </View>
                     </View>
-                    <Text variant="labelSmall" style={{ color: '#FFFFFF', textAlign: 'center', marginTop: 20 }}>Already have an account? <Text style={{ color: '#FFFF', fontWeight: 'bold' }} onPress={() => handleNext()}>Login</Text></Text>
+                    <Text variant="labelSmall" style={{ color: '#FFFFFF', textAlign: 'center', marginTop: 20 }}>Already have an account? <Text style={{ color: '#FFFF', fontWeight: 'bold' }} onPress={() => handleLogin()}>Login</Text></Text>
                     <Button
                         mode="contained"
                         style={{ width: 200, backgroundColor: '#F78900', marginTop: 20, alignSelf: 'center', borderWidth: 2, borderColor: '#fff' }}
                         textColor="#fff"
-                        onPress={() => handleRegister()}
+                        onPress={() => handleNext()}
                     >
                         NEXT
                     </Button>
