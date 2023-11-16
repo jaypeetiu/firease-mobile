@@ -41,8 +41,9 @@ const LoginScreen = ({ navigation }) => {
                 'password': password,
                 'remember_me': remember
             }).then((e) => {
-                console.log(e.data.token);
+                console.log(e.data);
                 setLocalStorageItem("userToken", JSON.stringify(e.data.token), 9999);
+                setLocalStorageItem("user", e.data.user.name, 9999);
                 navigation.navigate('MainApp');
             }).catch((error) => {
                 if (error.response) {

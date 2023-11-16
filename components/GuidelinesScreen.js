@@ -28,7 +28,7 @@ export default GuidelinesScreen = ({ navigation }) => {
                 </Text>
                 <Text
                     variant="titleMedium"
-                    style={{ alignSelf: 'center', marginTop: '10%', borderWidth: 1, borderRadius: 20, padding: 10, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103' }}
+                    // style={{ alignSelf: 'center', marginTop: '10%', borderWidth: 1, borderRadius: 20, padding: 10, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103' }}
                 >
                     What is Inferno application and how to use?
                 </Text>

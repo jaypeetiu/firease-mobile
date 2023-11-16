@@ -2,8 +2,13 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+#import <React/RCTBridge.h>
+#import <React/RCTRootView.h>
 
 @implementation AppDelegate
+
+// Add this line with your Google Maps API Key
+[GMSServices provideAPIKey:@"AIzaSyAFG3kvxH1eaD1oRxPMxhDvFrFFeLP5LyA"];
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
