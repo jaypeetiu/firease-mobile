@@ -6,30 +6,53 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 
 const MainAppScreen = ({ navigation }) => {
-    const [token, setUserToken] = useState();
-    const [user, setUser] = useState([]);
+    const [token, setUserToken] = useState('');
+    const [user, setUser] = useState();
+    const [phone, setPhone] = useState();
     async function fetchData() {
         const value = await AsyncStorage.getItem('userToken');
         const user = await AsyncStorage.getItem('user');
+        const phone = await AsyncStorage.getItem('userPhone');
         console.log(value);
-        console.log(user);
         setUserToken(value);
         setUser(user);
+        setPhone(phone);
         if (value == null && !value) {
             navigation.navigate('Login');
         }
     }
     useEffect(() => {
         fetchData();
-        // axios.get('locations').then((e)=>{
-        //     console.log(e.data);
-        // })
     }, []);
 
     const handleLogout = () => {
-        AsyncStorage.removeItem('userToken');
-        AsyncStorage.removeItem('user');
-        navigation.navigate('GetStarted');
+        const headers = { 'Authorization': `Bearer ${token}` };
+        axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+        axios.post('/auth/logout',null, {
+            headers
+        }).then((e) => {
+            console.log(e.data);
+            AsyncStorage.removeItem('userToken');
+            AsyncStorage.removeItem('user');
+            AsyncStorage.removeItem('userPhone');
+            navigation.navigate('GetStarted');
+        }).catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("No response received, check your network connection.");
+            } else {
+                // Something happened in setting up the request
+                console.error("Error message:", error.message);
+            }
+        });
+        // AsyncStorage.removeItem('userToken');
+        // AsyncStorage.removeItem('user');
+        // AsyncStorage.removeItem('userPhone');
     };
 
     const markers = [
@@ -53,12 +76,41 @@ const MainAppScreen = ({ navigation }) => {
         // Add your custom logic for handling marker press
     };
 
+    const handleCall = () => {
+        const headers = { 'Authorization': `Bearer ${token}` };
+        axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+        axios.defaults.headers.common = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': window.csrf_token,
+        }
+        axios.get('stations', {
+            headers
+        }).then((e) => {
+            console.log(e.data);
+            console.log('MAO NI');
+        }).catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                console.error(token);
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("No response received, check your network connection.");
+            } else {
+                // Something happened in setting up the request
+                console.error("Error message:", error.message);
+            }
+        });
+    };
+
     return (
         <ScrollView style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', height: 120, backgroundColor: '#9B0103' }}>
                 <View style={{ flex: 0.8, alignItems: 'center', justifyContent: 'center' }} >
                     <Text variant='titleLarge' style={{ color: 'white' }}>{user}</Text>
-                    <Text variant='titleMedium' style={{ color: 'white' }}>0912838837</Text>
+                    <Text variant='titleMedium' style={{ color: 'white' }}>{phone}</Text>
                 </View>
                 <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                     <Avatar.Image
@@ -102,7 +154,7 @@ const MainAppScreen = ({ navigation }) => {
                         source={require('../assets/logo.png')}
                         style={{ backgroundColor: '#fff', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40', padding: 40, alignItems: 'center', justifyContent: 'center', top: 20 }}
                     />
-                    <Text onPress={() => { console.log(true) }} variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, color: '#9B0103' }}>CLICK ME FOR EMERGENCY</Text>
+                    <Text onPress={() => { handleCall() }} variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, color: '#9B0103' }}>CLICK ME FOR EMERGENCY</Text>
                 </View>
                 <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, backgroundColor: '#9B0103', color: '#fff', borderWidth: 1, borderColor: '#9B0103', borderRadius: 50, padding: 20, marginBottom: 20 }}>
                     If you need help/ assistance choose bottons above, don’t forget to always turn on your location, for us to directly locate you.

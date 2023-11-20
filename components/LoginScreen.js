@@ -42,8 +42,9 @@ const LoginScreen = ({ navigation }) => {
                 'remember_me': remember
             }).then((e) => {
                 console.log(e.data);
-                setLocalStorageItem("userToken", JSON.stringify(e.data.token), 9999);
+                setLocalStorageItem("userToken", e.data.token, 9999);
                 setLocalStorageItem("user", e.data.user.name, 9999);
+                e.data.user.phone_number?setLocalStorageItem("userPhone", e.data.user.phone_number, 9999):false;
                 navigation.navigate('MainApp');
             }).catch((error) => {
                 if (error.response) {
@@ -62,7 +63,6 @@ const LoginScreen = ({ navigation }) => {
         } catch (error) {
             console.log(error);
         }
-        // navigation.navigate('GetStarted');
     };
 
     return (
