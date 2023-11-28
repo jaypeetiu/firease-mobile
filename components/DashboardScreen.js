@@ -195,12 +195,12 @@ const DashboardScreen = ({ navigation }) => {
                         <Marker
                             key={marker.id}
                             coordinate={{ latitude: JSON.parse(marker.lat), longitude: JSON.parse(marker.lang) }}
-                            title={marker.name}
+                            title={marker.address}
                             description={'Description Station #' + marker.id}
                             onPress={() => handleMarkerPress(marker)}
                         >
                             <View style={styles.customMarker}>
-                                <Text style={styles.markerText}>{marker.name}</Text>
+                                <Text style={styles.markerText}>{marker.address}</Text>
                             </View>
                         </Marker>
                     )) : stations()}
@@ -226,7 +226,7 @@ const DashboardScreen = ({ navigation }) => {
                         type={RNCamera.Constants.Type.back}
                         captureAudio={false}
                     />
-                    <Button title="Take Picture" onPress={takePicture} />
+                    <Button title="Take Picture" onPress={takePicture} >Take Picture</Button>
                     {capturedImage && (
                         <>
                             <Image source={{ uri: capturedImage.uri }} style={{ width: 200, height: 200 }} />
