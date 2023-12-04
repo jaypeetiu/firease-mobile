@@ -68,6 +68,7 @@ export default RegisterScreen = ({ navigation }) => {
                 'email': email,
                 'password': password,
                 'password_confirmation': confirmPassword,
+                'phone_number': phone,
             }
         });
     }

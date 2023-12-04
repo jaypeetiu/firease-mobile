@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image } from 'react-native';
 import { Avatar, Button, Surface, Text } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
@@ -10,12 +10,15 @@ import { RNCamera } from 'react-native-camera';
 
 const DashboardScreen = ({ navigation }) => {
     const [token, setUserToken] = useState('');
+    const [userID, setUserID] = useState();
     const [user, setUser] = useState();
     const [phone, setPhone] = useState();
     const [locations, setLocations] = useState([]);
     const phoneNumber = 'tel:+123456789'; // Replace with your actual telephone number
     const cameraRef = useRef(null);
     const [capturedImage, setCapturedImage] = useState(null);
+    const [cam, setCam] = useState(false);
+    const [address, setAddress] = useState('');
     const takePicture = async () => {
         if (cameraRef.current) {
             const options = { quality: 0.5, base64: true };
@@ -25,33 +28,62 @@ const DashboardScreen = ({ navigation }) => {
     };
 
     const uploadImage = async () => {
-        if (capturedImage) {
-            try {
-                const formData = new FormData();
-                formData.append('image', {
-                    uri: capturedImage.uri,
-                    type: 'image/jpeg',
-                    name: 'photo.jpg',
-                });
+        try {
+            console.log(capturedImage.uri);
+            const formData = new FormData();
+            formData.append('image', {
+                uri: capturedImage.uri,
+                type: 'image/jpeg',
+                name: 'photo.jpg',
+            });
+            formData.append('address', address);
+            formData.append('user_id', userID);
+            formData.append('vehicle_id', 1);
+            formData.append('station_id', 1);//changeable
 
-                const response = await axios.post('YOUR_LARAVEL_API_ENDPOINT', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                console.log('Image uploaded successfully:', response.data);
-            } catch (error) {
-                console.error('Error uploading image:', error);
+            axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+            axios.defaults.headers.common = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': window.csrf_token,
             }
+            const response = await axios.post('post/store', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
+            }).then((e) => {
+                console.log(e.data);
+                setCapturedImage(null);
+                setCam(false);
+            }).catch((error) => {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    console.error(token);
+                    console.error("Response data:", error.response.data);
+                    console.error("Response status:", error.response.status);
+                    console.error("Response headers:", error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.error("No response received, check your network connection.");
+                } else {
+                    // Something happened in setting up the request
+                    console.error("Error message:", error.message);
+                }
+            });
+
+            console.log('Image uploaded successfully:', response.data);
+        } catch (error) {
+            console.error('Error uploading image:', error);
         }
     };
     async function fetchData() {
         const value = await AsyncStorage.getItem('userToken');
+        const ID = await AsyncStorage.getItem('userID');
         const user = await AsyncStorage.getItem('user');
         const phone = await AsyncStorage.getItem('userPhone');
         console.log(value);
         setUserToken(value);
+        setUserID(ID);
         setUser(user);
         setPhone(phone);
         if (value == null && !value) {
@@ -63,7 +95,14 @@ const DashboardScreen = ({ navigation }) => {
         Geolocation.getCurrentPosition(
             position => {
                 console.log('Current position:', position);
-                // Handle the location data
+                axios.get(
+                    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCYxHTd4H5yAuZ3K6_MT1DuJ9XvDVhNTQs`
+                ).then(response => {
+                    const firstAddress = response.data.results[0];
+                    if (firstAddress) {
+                        setAddress(firstAddress.formatted_address);
+                    }
+                }).catch(error => console.error('Error fetching address:', error));
             },
             error => {
                 console.log('Error getting location:', error);
@@ -117,6 +156,7 @@ const DashboardScreen = ({ navigation }) => {
             console.log(e.data);
             AsyncStorage.removeItem('userToken');
             AsyncStorage.removeItem('user');
+            AsyncStorage.removeItem('userAvatar');
             AsyncStorage.removeItem('userPhone');
             navigation.navigate('GetStarted');
         }).catch((error) => {
@@ -133,26 +173,7 @@ const DashboardScreen = ({ navigation }) => {
                 console.error("Error message:", error.message);
             }
         });
-        // AsyncStorage.removeItem('userToken');
-        // AsyncStorage.removeItem('user');
-        // AsyncStorage.removeItem('userPhone');
     };
-
-    const markers = [
-        {
-            id: 1,
-            title: 'Marker 1',
-            description: 'Description for Marker 1',
-            coordinate: { latitude: 37.78825, longitude: -122.4324 },
-        },
-        {
-            id: 2,
-            title: 'Marker 2',
-            description: 'Description for Marker 2',
-            coordinate: { latitude: 37.79825, longitude: -122.4424 },
-        },
-        // Add more markers as needed
-    ];
 
     const handleMarkerPress = (marker) => {
         console.log(`Marker ${marker.id} pressed!`);
@@ -162,6 +183,31 @@ const DashboardScreen = ({ navigation }) => {
     const handleCall = () => {
         Linking.openURL(phoneNumber);
     };
+
+    // const takePicture = async (camera) => {
+    //     const options = { quality: 0.5, base64: true };
+    //     const data = await camera.takePictureAsync(options);
+    //     //  eslint-disable-next-line
+    //     console.log(data.uri);
+    //     setCapturedImage(data);
+    // };
+
+    const PendingView = () => (
+        <View
+            style={{
+                flex: 1,
+                backgroundColor: 'lightgreen',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
+            <Text>Waiting</Text>
+        </View>
+    );
+
+    const handleCamera = () => {
+        setCam(true);
+    }
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -215,29 +261,64 @@ const DashboardScreen = ({ navigation }) => {
                             paddingHorizontal: 15,
                             backgroundColor: '#9B0103',
                             borderRadius: 50,
+                            zIndex: 99
                         }}
                         onPress={handleCall}
                     >
                         <Icon name="phone" size={30} color="#fff" />
                     </TouchableOpacity>
-                    <RNCamera
-                        ref={cameraRef}
-                        style={{ flex: 1 }}
-                        type={RNCamera.Constants.Type.back}
-                        captureAudio={false}
-                    />
-                    <Button title="Take Picture" onPress={takePicture} >Take Picture</Button>
                     {capturedImage && (
                         <>
-                            <Image source={{ uri: capturedImage.uri }} style={{ width: 200, height: 200 }} />
-                            <Button title="Upload Image" onPress={uploadImage} />
+                            <Image source={{ uri: capturedImage.uri }} style={{ width: '100%', height: 300, alignSelf: 'center', borderWidth: 2, borderColor: '#9B0103' }} />
+                            <View style={{ flexDirection: 'row' }}>
+                                <Button title="Upload Image" onPress={uploadImage} textColor='white' style={{ backgroundColor: '#9B0103', width: '50%' }}>UPLOAD</Button>
+                                <Button title="Remove Image" onPress={() => setCapturedImage(null)} textColor='white' style={{ backgroundColor: '#9B0103', width: '50%' }}>REMOVE</Button>
+                            </View>
                         </>
                     )}
-                    <Avatar.Image
-                        size={70}
-                        source={require('../assets/logo.png')}
-                        style={{ backgroundColor: '#fff', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40', padding: 40, alignItems: 'center', justifyContent: 'center', top: 20 }}
-                    />
+                    {cam == true && capturedImage == null ? (
+                        <RNCamera
+                            ref={cameraRef}
+                            style={styles.preview}
+                            type={RNCamera.Constants.Type.back}
+                            flashMode={RNCamera.Constants.FlashMode.on}
+                            androidCameraPermissionOptions={{
+                                title: 'Permission to use camera',
+                                message: 'We need your permission to use your camera',
+                                buttonPositive: 'Ok',
+                                buttonNegative: 'Cancel',
+                            }}
+                            androidRecordAudioPermissionOptions={{
+                                title: 'Permission to use audio recording',
+                                message: 'We need your permission to use your audio',
+                                buttonPositive: 'Ok',
+                                buttonNegative: 'Cancel',
+                            }}
+                        >
+                            {({ camera, status, recordAudioPermissionStatus }) => {
+                                if (status !== 'READY') return <PendingView />;
+                                return (
+                                    <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+                                        <TouchableOpacity onPress={takePicture} style={styles.capture}>
+                                            <Text style={{ fontSize: 14 }}> CAPTURE </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => setCam(false)} style={styles.capture}>
+                                            <Text style={{ fontSize: 14 }}> CANCEL </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                );
+                            }}
+                        </RNCamera>
+                    ) : ''}
+
+                    <TouchableOpacity onPress={() => { handleCamera() }}>
+                        <Avatar.Image
+                            size={70}
+                            source={require('../assets/logo.png')}
+                            style={{ backgroundColor: '#fff', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40', padding: 40, alignItems: 'center', justifyContent: 'center', top: 20 }}
+                        />
+                    </TouchableOpacity>
+
                     <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, color: '#9B0103' }}>CLICK ME FOR EMERGENCY</Text>
                 </View>
                 <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, backgroundColor: '#9B0103', color: '#fff', borderWidth: 1, borderColor: '#9B0103', borderRadius: 50, padding: 20, marginBottom: 20 }}>
@@ -257,6 +338,24 @@ const styles = StyleSheet.create({
     markerText: {
         color: 'white',
         fontWeight: 'bold',
+    },
+    preview: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        marginBottom: 200,
+        zIndex: 100,
+        borderWidth: 2,
+        borderColor: '#9B0103'
+    },
+    capture: {
+        flex: 0,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        padding: 10,
+        paddingHorizontal: 20,
+        alignSelf: 'center',
+        margin: 20,
     },
 });
 

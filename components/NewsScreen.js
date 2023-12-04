@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image } from 'react-native';
 import { Avatar, Button, Surface, Text } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
@@ -38,6 +38,30 @@ const NewsScreen = ({ navigation }) => {
         );
     }, []);
 
+    const handleNews = () => {
+        navigation.navigate('Blog', {
+            data: {
+                'token': token,
+            }
+        });
+    }
+
+    const handleAid = () => {
+        navigation.navigate('FirstAid');
+    }
+
+    const handleSafety = () => {
+        navigation.navigate('FireSafety');
+    }
+
+    const handleAbout = () => {
+        navigation.navigate('BFP');
+    }
+
+    const handleCitizen = () => {
+        navigation.navigate('Citizen');
+    }
+
     return (
         <ScrollView style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', height: 120, backgroundColor: '#9B0103' }}>
@@ -54,8 +78,55 @@ const NewsScreen = ({ navigation }) => {
                     <Text variant='labelSmall' style={{ color: '#B09E40' }}>Responder</Text>
                 </View>
             </View>
-            <Text variant='titleLarge' style={{ color: '#9B0103', fontWeight: 'bold', marginHorizontal: 10 }}>NEWS UPDATES</Text>
-            
+            <View style={styles.container}>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => { handleNews() }} style={styles.column}>
+                        <Image
+                            source={require('../assets/news.png')}
+                            style={{ backgroundColor: '#fff', alignSelf: 'center', padding: 0, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}
+                        />
+                        <Text style={{ fontWeight: 'bold' }}>NEWS</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => { handleAid() }} style={styles.column}>
+                        <Image
+                            source={require('../assets/aid.png')}
+                            style={{ backgroundColor: '#fff', alignSelf: 'center', padding: 0, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}
+                        />
+                        <Text style={{ fontWeight: 'bold' }}>FIRST AID TIPS</Text></TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => { handleSafety() }} style={styles.column}>
+                        <Image
+                            source={require('../assets/tips.png')}
+                            style={{ backgroundColor: '#fff', alignSelf: 'center', padding: 0, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}
+                        />
+                        <Text style={{ fontWeight: 'bold' }}>FIRE SAFETY TIPS</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => { handleAbout() }} style={styles.column}>
+                        <Image
+                            source={require('../assets/info.png')}
+                            style={{ backgroundColor: '#fff', alignSelf: 'center', padding: 0, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}
+                        />
+                        <Text style={{ fontWeight: 'bold' }}>ABOUT BFP</Text></TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => { handleCitizen() }} style={{
+                        flex: 1,
+                        borderColor: '#9B0103',
+                        borderWidth: 3,
+                        borderRadius: 100,
+                        alignItems: 'center',
+                        paddingVertical: 40,
+                        padding: 20,
+                        margin: 8,
+                        backgroundColor: '#fff',
+                        marginHorizontal: 100
+                    }}>
+                        <Image
+                            source={require('../assets/citizen.png')}
+                            style={{ backgroundColor: '#fff', alignSelf: 'center', padding: 0, alignItems: 'center', justifyContent: 'center', marginBottom: 5 }}
+                        />
+                        <Text style={{ fontWeight: 'bold' }}>CITIZEN'S CHARTER</Text></TouchableOpacity>
+                </View>
+            </View>
         </ScrollView>
     );
 };
@@ -69,6 +140,28 @@ const styles = StyleSheet.create({
     markerText: {
         color: 'white',
         fontWeight: 'bold',
+    },
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 16,
+    },
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    column: {
+        flex: 1,
+        borderColor: '#9B0103',
+        borderWidth: 3,
+        borderRadius: 100,
+        alignItems: 'center',
+        paddingVertical: 40,
+        padding: 20,
+        margin: 8,
+        backgroundColor: '#fff',
     },
 });
 

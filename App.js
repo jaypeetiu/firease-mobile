@@ -10,6 +10,11 @@ import GetStartedScreen from './components/GetStartedScreen';
 import GuidelinesScreen from './components/GuidelinesScreen';
 import NoteScreen from './components/NoteScreen';
 import AttachFileScreen from './components/AttachFileScreen';
+import BlogScreen from './components/BlogScreen';
+import FireSafetyScreen from './components/FireSafetyScreen';
+import FirstAidScreen from './components/FirstAidScreen';
+import BFPScreen from './components/BFPScreen';
+import CitizenScreen from './components/CitizenScreen';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +56,11 @@ export default function App() {
         <Stack.Screen name="AttachFile" component={AttachFileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainAppScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Blog" component={BlogScreen} options={{headerShown: false}} />
+        <Stack.Screen name="FireSafety" component={FireSafetyScreen} options={{headerShown: false}} />
+        <Stack.Screen name="FirstAid" component={FirstAidScreen} options={{headerShown: false}} />
+        <Stack.Screen name="BFP" component={BFPScreen} options={{headerShown: false}} />
+        <Stack.Screen name="Citizen" component={CitizenScreen} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

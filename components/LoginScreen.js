@@ -43,7 +43,9 @@ const LoginScreen = ({ navigation }) => {
             }).then((e) => {
                 console.log(e.data);
                 setLocalStorageItem("userToken", e.data.token, 9999);
+                setLocalStorageItem("userID", JSON.stringify(e.data.user.id), 9999);
                 setLocalStorageItem("user", e.data.user.name, 9999);
+                setLocalStorageItem("userAvatar", e.data.user.avatar, 9999);
                 e.data.user.phone_number?setLocalStorageItem("userPhone", e.data.user.phone_number, 9999):false;
                 navigation.navigate('MainApp');
             }).catch((error) => {

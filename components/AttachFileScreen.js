@@ -17,7 +17,7 @@ export default AttachFileScreen = ({ navigation }) => {
     const [visible, setVisible] = useState(false);
     const [image, setImage] = useState(null);
     const [selfieUri, setSelfieUri] = useState(null);
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
 
     const showDialog = () => setVisible(true);
 
@@ -58,6 +58,7 @@ export default AttachFileScreen = ({ navigation }) => {
         formData.append('email', receivedValue.email);
         formData.append('password', receivedValue.password);
         formData.append('password_confirmation', receivedValue.password_confirmation);
+        formData.append('phone_number', receivedValue.phone_number);
         formData.append('id_image', {
             uri: image.uri,
             type: image.type,
