@@ -14,7 +14,7 @@ const DashboardScreen = ({ navigation }) => {
     const [user, setUser] = useState();
     const [phone, setPhone] = useState();
     const [locations, setLocations] = useState([]);
-    const phoneNumber = 'tel:+123456789'; // Replace with your actual telephone number
+    const phoneNumber = 'tel:911'; // Replace with your actual telephone number
     const cameraRef = useRef(null);
     const [capturedImage, setCapturedImage] = useState(null);
     const [cam, setCam] = useState(false);
@@ -122,8 +122,7 @@ const DashboardScreen = ({ navigation }) => {
             axios.get('stations', {
                 headers
             }).then((e) => {
-                console.log(e.data);
-                console.log('MAO NI');
+                console.log(e.data.stations);
                 setLocations(e.data.stations);
             }).catch((error) => {
                 if (error.response) {
@@ -242,7 +241,7 @@ const DashboardScreen = ({ navigation }) => {
                             key={marker.id}
                             coordinate={{ latitude: JSON.parse(marker.lat), longitude: JSON.parse(marker.lang) }}
                             title={marker.address}
-                            description={'Description Station #' + marker.id}
+                            description={marker.description}
                             onPress={() => handleMarkerPress(marker)}
                         >
                             <View style={styles.customMarker}>

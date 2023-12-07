@@ -30,13 +30,13 @@ export default GuidelinesScreen = ({ navigation }) => {
                     variant="titleMedium"
                     // style={{ alignSelf: 'center', marginTop: '10%', borderWidth: 1, borderRadius: 20, padding: 10, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103' }}
                 >
-                    What is Inferno application and how to use?
+                    What is Firease application and how to use?
                 </Text>
                 <Text
                     variant="titleMedium"
                     style={{ alignSelf: 'center', marginTop: '10%', margin: '5%', color: '#000', textAlign: 'justify', fontWeight: '700' }}
                 >
-                    The Inferno application is a fire emergency hotline. The user(s) can communicate with the fire stations by tapping the logo button without the hassle of calling the admin and specifying their emergency needs, you just need to send picture/ video for proof and evidence. In addition, the application has access to your GPS location.
+                    The Firease application is a fire emergency hotline. The user(s) can communicate with the fire stations by tapping the logo button without the hassle of calling the admin and specifying their emergency needs, you just need to send picture/ video for proof and evidence. In addition, the application has access to your GPS location.
                 </Text>
                 <Button
                     mode="contained"
