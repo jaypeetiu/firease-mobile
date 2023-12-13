@@ -57,50 +57,52 @@ export default BlogScreen = ({ navigation }) => {
             <View style={{ backgroundColor: '#000', height: '100%' }}>
                 <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#9B0103', padding: 15, paddingTop: 30 }}>BREAKING NEWS</Text>
                 <Image source={news ? { uri: news.image } : require('../assets/logo.png')} style={{ width: '100%', maxHeight: 200, minHeight: 200, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
-                <Text style={{ fontSize: 16, fontWeight: '700', color: '#9B0103', padding: 10 }}>{news ? news.description : 'No News Available'}</Text>
+                <Text style={{ fontSize: 16, fontWeight: '700', color: '#9B0103', padding: 10 }}>{news ? news.description : 'No Breaking News Available'}</Text>
 
-                {newsLists != ''? newsLists?.map((value) => (
+                {newsLists != '' ? newsLists?.map((value) => (
                     <View key={value.id} style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Image source={value ? { uri: value.image } : require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                        <Image source={value ? { uri: value.image } : require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                         <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>{value.description}</Text>
                     </View>
-                )):''}
-                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                )) :
+                    <Text style={{ fontSize: 16, fontWeight: '700', color: '#9B0103', padding: 10 }}>{news ? news.description : 'No News Available'}</Text>
+                }
+                {/* <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View>
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
+                    <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
-                </View>
+                </View> */}
             </View>
         </ScrollView>
     );
