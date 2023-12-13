@@ -10,7 +10,7 @@ export default BlogScreen = ({ navigation }) => {
     const route = useRoute();
     const receivedValue = route.params?.data || 'Default Value';
     const [news, setNews] = useState();
-    const [newsLists, setNewsLists] = useState([]);
+    const [newsLists, setNewsLists] = useState();
 
     const handleNews = async () => {
         axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
