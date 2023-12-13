@@ -70,7 +70,7 @@ export default AttachFileScreen = ({ navigation }) => {
             name: 'selfie.jpg',
         });
         try {
-            axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+            axios.defaults.baseURL = 'https://firease.tech/api';
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': window.csrf_token,

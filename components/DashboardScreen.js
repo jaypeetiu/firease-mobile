@@ -41,7 +41,7 @@ const DashboardScreen = ({ navigation }) => {
             formData.append('vehicle_id', 1);
             formData.append('station_id', 1);//changeable
 
-            axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+            axios.defaults.baseURL = 'https://firease.tech/api';
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': window.csrf_token,
@@ -114,7 +114,7 @@ const DashboardScreen = ({ navigation }) => {
     const stations = () => {
         if (token != '') {
             const headers = { 'Authorization': `Bearer ${token}` };
-            axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+            axios.defaults.baseURL = 'https://firease.tech/api';
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': window.csrf_token,
@@ -148,7 +148,7 @@ const DashboardScreen = ({ navigation }) => {
 
     const handleLogout = () => {
         const headers = { 'Authorization': `Bearer ${token}` };
-        axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+        axios.defaults.baseURL = 'https://firease.tech/api';
         axios.post('/auth/logout', null, {
             headers
         }).then((e) => {

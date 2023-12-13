@@ -13,7 +13,7 @@ export default BlogScreen = ({ navigation }) => {
     const [newsLists, setNewsLists] = useState();
 
     const handleNews = async () => {
-        axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
+        axios.defaults.baseURL = 'https://firease.tech/api';
         axios.defaults.headers.common = {
             'X-Requested-With': 'XMLHttpRequest',
             'X-CSRF-TOKEN': window.csrf_token,
@@ -64,7 +64,7 @@ export default BlogScreen = ({ navigation }) => {
                         <Image source={value ? { uri: value.image } : require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                         <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>{value.description}</Text>
                     </View>
-                )):handleNews()}
+                )):''}
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Image source={require('../assets/logo.png')} style={{ width: '50%', maxHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
