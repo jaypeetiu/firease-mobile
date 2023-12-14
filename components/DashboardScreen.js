@@ -302,9 +302,42 @@ const DashboardScreen = ({ navigation }) => {
                         </Portal>
                         <Portal>
                             <Modal visible={visibleModal} onDismiss={hideModalNotif} contentContainerStyle={{ padding: 20, backgroundColor: '#F78900', borderRadius: 10, marginHorizontal: 20 }}>
-                                <Text style={{ alignSelf: 'center', paddingBottom: 20, fontWeight: 'bold', color: '#FFF' }}>
+                                <Text style={{ alignSelf: 'baseline', paddingBottom: 20, fontWeight: 'bold' }}>
                                     Hello, we received a notification that you need us, they are on their way now.
                                 </Text>
+                                <Text style={{ alignSelf: 'baseline', paddingBottom: 20, fontWeight: 'bold' }}>Pro tips: </Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Stop all activities immediately.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Assess that all persons can evacuate the area.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Follow EXIT signs to the nearest safe exit.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Use the stairs.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Allow others to enter the stairwell.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Steer clear of hazards.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Move away from the building.</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                                    <Text style={styles.instructionText}>Do not re-enter the building without an “all clear”.</Text>
+                                </View>
                                 {/* <View style={{ flexDirection: 'row' }}>
                                     <Button title="Yes" onPress={uploadImage} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>Yes</Button>
                                     <Button title="No" onPress={hideModalNotif} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>No</Button>
@@ -395,6 +428,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         alignSelf: 'center',
         margin: 20,
+    },
+    bulletPoint: {
+        fontSize: 15,
+        marginRight: 5,
+        fontWeight: 'bold'
+    },
+    instructionText: {
+        marginBottom: 10,
+        fontWeight: 'bold',
     },
 });
 
