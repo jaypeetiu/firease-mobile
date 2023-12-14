@@ -53,8 +53,9 @@ export default BlogScreen = ({ navigation }) => {
     };
 
     return (
-        <ScrollView style={{ flex: 1 }}>
-            <View style={{ backgroundColor: '#000', height: '100%' }}>
+
+        <View style={{ backgroundColor: '#000', height: '100%' }}>
+            <ScrollView style={{ flex: 1 }}>
                 <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#9B0103', padding: 15, paddingTop: 30 }}>BREAKING NEWS</Text>
                 <Image source={news ? { uri: news.image } : require('../assets/logo.png')} style={{ width: '100%', maxHeight: 200, minHeight: 200, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                 <Text style={{ fontSize: 16, fontWeight: '700', color: '#9B0103', padding: 10 }}>{news ? news.description : 'No Breaking News Available'}</Text>
@@ -103,7 +104,7 @@ export default BlogScreen = ({ navigation }) => {
                     <Image source={require('../assets/logo.png')} style={{ width: '50%', minHeight: 130, borderWidth: 2, borderColor: '#FFF5', borderRadius: 15 }} />
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View> */}
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 }

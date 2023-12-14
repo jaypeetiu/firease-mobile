@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image, ActivityIndicator } from 'react-native';
-import { Avatar, Button, Surface, Text } from "react-native-paper";
+import { Avatar, Button, Modal, PaperProvider, Portal, Surface, Text } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
@@ -20,6 +20,14 @@ const DashboardScreen = ({ navigation }) => {
     const [cam, setCam] = useState(false);
     const [address, setAddress] = useState('');
     const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [visibleModal, setVisibleModal] = useState(false);
+    //Confirmation
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    //Modal Notification
+    const showModalNotif = () => setVisibleModal(true);
+    const hideModalNotif = () => setVisibleModal(false);
     const takePicture = async () => {
         if (cameraRef.current) {
             const options = { quality: 0.5, base64: true };
@@ -58,6 +66,8 @@ const DashboardScreen = ({ navigation }) => {
                 setCapturedImage(null);
                 setCam(false);
                 setLoading(false);
+                hideModal();
+                showModalNotif();
             }).catch((error) => {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -214,125 +224,147 @@ const DashboardScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', height: 120, backgroundColor: '#9B0103' }}>
-                <View style={{ flex: 0.8, alignItems: 'center', justifyContent: 'center' }} >
-                    <Text variant='titleLarge' style={{ color: 'white' }}>{user}</Text>
-                    <Text variant='titleMedium' style={{ color: 'white' }}>{phone}</Text>
-                </View>
-                <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
-                    <Avatar.Image
-                        size={60}
-                        source={require('../assets/logo.png')}
-                        style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
-                    />
-                    <Text variant='labelSmall' style={{ color: '#B09E40' }}>Responder</Text>
-                </View>
-            </View>
-            <Button title="Logout" onPress={handleLogout} />
-            <Text variant='titleLarge' style={{ color: '#9B0103', fontWeight: 'bold', marginHorizontal: 10 }}>FIRE STATION NEARBY</Text>
-            <View style={{ flexDirection: 'column' }}>
-                <MapView
-                    style={{ flex: 1, minHeight: 300 }}
-                    initialRegion={{
-                        latitude: 8.4810899,
-                        longitude: 124.6498201,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                >
-                    {locations != '' ? locations?.map((marker) => (
-                        <Marker
-                            key={marker.id}
-                            coordinate={{ latitude: JSON.parse(marker.lat), longitude: JSON.parse(marker.lang) }}
-                            title={marker.address}
-                            description={marker.description}
-                            onPress={() => handleMarkerPress(marker)}
-                        >
-                            <View style={styles.customMarker}>
-                                <Text style={styles.markerText}>{marker.address}</Text>
-                            </View>
-                        </Marker>
-                    )) : stations()}
-                </MapView>
-                <View style={{ flexDirection: 'column' }}>
-                    <TouchableOpacity
-                        style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 10,
-                            padding: 10,
-                            paddingHorizontal: 15,
-                            backgroundColor: '#9B0103',
-                            borderRadius: 50,
-                            zIndex: 99
-                        }}
-                        onPress={handleCall}
-                    >
-                        <Icon name="phone" size={30} color="#fff" />
-                    </TouchableOpacity>
-                    {capturedImage && (
-                        <>
-                            <Image source={{ uri: capturedImage.uri }} style={{ width: '100%', height: 300, alignSelf: 'center', borderWidth: 2, borderColor: '#9B0103' }} />
-                            <View style={{ flexDirection: 'row' }}>
-                                <Button title="Upload Image" onPress={uploadImage} textColor='white' style={{ backgroundColor: '#9B0103', width: '50%' }}>UPLOAD</Button>
-                                <Button title="Remove Image" onPress={() => setCapturedImage(null)} textColor='white' style={{ backgroundColor: '#9B0103', width: '50%' }}>REMOVE</Button>
-                            </View>
-                        </>
-                    )}
-                    {loading ? (
-                        <ActivityIndicator size="large" />
-                    ) : ''}
-                    {cam == true && capturedImage == null ? (
-                        <RNCamera
-                            ref={cameraRef}
-                            style={styles.preview}
-                            type={RNCamera.Constants.Type.back}
-                            flashMode={RNCamera.Constants.FlashMode.on}
-                            androidCameraPermissionOptions={{
-                                title: 'Permission to use camera',
-                                message: 'We need your permission to use your camera',
-                                buttonPositive: 'Ok',
-                                buttonNegative: 'Cancel',
-                            }}
-                            androidRecordAudioPermissionOptions={{
-                                title: 'Permission to use audio recording',
-                                message: 'We need your permission to use your audio',
-                                buttonPositive: 'Ok',
-                                buttonNegative: 'Cancel',
-                            }}
-                        >
-                            {({ camera, status, recordAudioPermissionStatus }) => {
-                                if (status !== 'READY') return <PendingView />;
-                                return (
-                                    <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                                        <TouchableOpacity onPress={takePicture} style={styles.capture}>
-                                            <Text style={{ fontSize: 14 }}> CAPTURE </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => setCam(false)} style={styles.capture}>
-                                            <Text style={{ fontSize: 14 }}> CANCEL </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                );
-                            }}
-                        </RNCamera>
-                    ) : ''}
-
-                    <TouchableOpacity onPress={() => { handleCamera() }}>
+        <PaperProvider>
+            <ScrollView style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', height: 120, backgroundColor: '#9B0103' }}>
+                    <View style={{ flex: 0.8, alignItems: 'center', justifyContent: 'center' }} >
+                        <Text variant='titleLarge' style={{ color: 'white' }}>{user}</Text>
+                        <Text variant='titleMedium' style={{ color: 'white' }}>{phone}</Text>
+                    </View>
+                    <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                         <Avatar.Image
-                            size={70}
+                            size={60}
                             source={require('../assets/logo.png')}
-                            style={{ backgroundColor: '#fff', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40', padding: 40, alignItems: 'center', justifyContent: 'center', top: 20 }}
+                            style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                         />
-                    </TouchableOpacity>
-
-                    <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, color: '#9B0103' }}>CLICK ME FOR EMERGENCY</Text>
+                        <Text variant='labelSmall' style={{ color: '#B09E40' }}>Responder</Text>
+                    </View>
                 </View>
-                <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, backgroundColor: '#9B0103', color: '#fff', borderWidth: 1, borderColor: '#9B0103', borderRadius: 50, padding: 20, marginBottom: 20 }}>
-                    If you need help/ assistance choose bottons above, don’t forget to always turn on your location, for us to directly locate you.
-                </Text>
-            </View>
-        </ScrollView>
+                <Button title="Logout" onPress={handleLogout} />
+                <Text variant='titleLarge' style={{ color: '#9B0103', fontWeight: 'bold', marginHorizontal: 10 }}>FIRE STATION NEARBY</Text>
+                <View style={{ flexDirection: 'column' }}>
+                    <MapView
+                        style={{ flex: 1, minHeight: 300 }}
+                        initialRegion={{
+                            latitude: 8.4810899,
+                            longitude: 124.6498201,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        }}
+                    >
+                        {locations != '' ? locations?.map((marker) => (
+                            <Marker
+                                key={marker.id}
+                                coordinate={{ latitude: JSON.parse(marker.lat), longitude: JSON.parse(marker.lang) }}
+                                title={marker.address}
+                                description={marker.description}
+                                onPress={() => handleMarkerPress(marker)}
+                            >
+                                <View style={styles.customMarker}>
+                                    <Text style={styles.markerText}>{marker.address}</Text>
+                                </View>
+                            </Marker>
+                        )) : stations()}
+                    </MapView>
+                    <View style={{ flexDirection: 'column' }}>
+                        <TouchableOpacity
+                            style={{
+                                position: 'absolute',
+                                top: 10,
+                                right: 10,
+                                padding: 10,
+                                paddingHorizontal: 15,
+                                backgroundColor: '#9B0103',
+                                borderRadius: 50,
+                                zIndex: 99
+                            }}
+                            onPress={handleCall}
+                        >
+                            <Icon name="phone" size={30} color="#fff" />
+                        </TouchableOpacity>
+                        {capturedImage && (
+                            <>
+                                <Image source={{ uri: capturedImage.uri }} style={{ width: '100%', height: 300, alignSelf: 'center', borderWidth: 2, borderColor: '#9B0103' }} />
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Button title="Upload Image" onPress={showModal} textColor='white' style={{ backgroundColor: '#9B0103', width: '50%' }}>UPLOAD</Button>
+                                    <Button title="Remove Image" onPress={() => setCapturedImage(null)} textColor='white' style={{ backgroundColor: '#9B0103', width: '50%' }}>REMOVE</Button>
+                                </View>
+                            </>
+                        )}
+                        <Portal>
+                            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{ padding: 20, backgroundColor: '#F78900', borderRadius: 10, marginHorizontal: 20 }}>
+                                <Text style={{ alignSelf: 'center', paddingBottom: 20, fontWeight: 'bold', color: '#FFF' }}>Are you sure?</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Button title="Yes" onPress={uploadImage} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>Yes</Button>
+                                    <Button title="No" onPress={hideModal} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>No</Button>
+                                </View>
+                            </Modal>
+                        </Portal>
+                        <Portal>
+                            <Modal visible={visibleModal} onDismiss={hideModalNotif} contentContainerStyle={{ padding: 20, backgroundColor: '#F78900', borderRadius: 10, marginHorizontal: 20 }}>
+                                <Text style={{ alignSelf: 'center', paddingBottom: 20, fontWeight: 'bold', color: '#FFF' }}>
+                                    Hello, we received a notification that you need us, they are on their way now.
+                                </Text>
+                                {/* <View style={{ flexDirection: 'row' }}>
+                                    <Button title="Yes" onPress={uploadImage} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>Yes</Button>
+                                    <Button title="No" onPress={hideModalNotif} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>No</Button>
+                                </View> */}
+                            </Modal>
+                        </Portal>
+                        {loading ? (
+                            <ActivityIndicator size="large" />
+                        ) : ''}
+                        {cam == true && capturedImage == null ? (
+                            <RNCamera
+                                ref={cameraRef}
+                                style={styles.preview}
+                                type={RNCamera.Constants.Type.back}
+                                flashMode={RNCamera.Constants.FlashMode.on}
+                                androidCameraPermissionOptions={{
+                                    title: 'Permission to use camera',
+                                    message: 'We need your permission to use your camera',
+                                    buttonPositive: 'Ok',
+                                    buttonNegative: 'Cancel',
+                                }}
+                                androidRecordAudioPermissionOptions={{
+                                    title: 'Permission to use audio recording',
+                                    message: 'We need your permission to use your audio',
+                                    buttonPositive: 'Ok',
+                                    buttonNegative: 'Cancel',
+                                }}
+                            >
+                                {({ camera, status, recordAudioPermissionStatus }) => {
+                                    if (status !== 'READY') return <PendingView />;
+                                    return (
+                                        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+                                            <TouchableOpacity onPress={takePicture} style={styles.capture}>
+                                                <Text style={{ fontSize: 14 }}> CAPTURE </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => setCam(false)} style={styles.capture}>
+                                                <Text style={{ fontSize: 14 }}> CANCEL </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    );
+                                }}
+                            </RNCamera>
+                        ) : ''}
+
+                        <TouchableOpacity onPress={() => { handleCamera() }}>
+                            <Avatar.Image
+                                size={70}
+                                source={require('../assets/logo.png')}
+                                style={{ backgroundColor: '#fff', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40', padding: 40, alignItems: 'center', justifyContent: 'center', top: 20 }}
+                            />
+                        </TouchableOpacity>
+
+                        <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, color: '#9B0103' }}>CLICK ME FOR EMERGENCY</Text>
+                    </View>
+                    <Text variant='labelLarge' style={{ alignSelf: 'center', marginTop: 30, backgroundColor: '#9B0103', color: '#fff', borderWidth: 1, borderColor: '#9B0103', borderRadius: 50, padding: 20, marginBottom: 20 }}>
+                        If you need help/ assistance choose bottons above, don’t forget to always turn on your location, for us to directly locate you.
+                    </Text>
+                </View>
+            </ScrollView>
+        </PaperProvider>
     );
 };
 
