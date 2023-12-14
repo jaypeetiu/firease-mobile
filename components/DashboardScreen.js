@@ -338,10 +338,6 @@ const DashboardScreen = ({ navigation }) => {
                                     <Text style={styles.bulletPoint}>{'\u2022'}</Text>
                                     <Text style={styles.instructionText}>Do not re-enter the building without an “all clear”.</Text>
                                 </View>
-                                {/* <View style={{ flexDirection: 'row' }}>
-                                    <Button title="Yes" onPress={uploadImage} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>Yes</Button>
-                                    <Button title="No" onPress={hideModalNotif} textColor='white' style={{ backgroundColor: '#9B0103', width: '45%', marginHorizontal: 5 }}>No</Button>
-                                </View> */}
                             </Modal>
                         </Portal>
                         {loading ? (
