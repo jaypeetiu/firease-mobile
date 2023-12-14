@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image, ActivityIndicator } from 'react-native';
 import { Avatar, Button, Surface, Text } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
@@ -19,6 +19,7 @@ const DashboardScreen = ({ navigation }) => {
     const [capturedImage, setCapturedImage] = useState(null);
     const [cam, setCam] = useState(false);
     const [address, setAddress] = useState('');
+    const [loading, setLoading] = useState(false);
     const takePicture = async () => {
         if (cameraRef.current) {
             const options = { quality: 0.5, base64: true };
@@ -28,6 +29,7 @@ const DashboardScreen = ({ navigation }) => {
     };
 
     const uploadImage = async () => {
+        setLoading(true);
         try {
             console.log(capturedImage.uri);
             const formData = new FormData();
@@ -55,6 +57,7 @@ const DashboardScreen = ({ navigation }) => {
                 console.log(e.data);
                 setCapturedImage(null);
                 setCam(false);
+                setLoading(false);
             }).catch((error) => {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -131,6 +134,7 @@ const DashboardScreen = ({ navigation }) => {
                     console.error("Response data:", error.response.data);
                     console.error("Response status:", error.response.status);
                     console.error("Response headers:", error.response.headers);
+                    AsyncStorage.clear();
                 } else if (error.request) {
                     // The request was made but no response was received
                     console.error("No response received, check your network connection.");
@@ -164,6 +168,7 @@ const DashboardScreen = ({ navigation }) => {
                 console.error("Response data:", error.response.data);
                 console.error("Response status:", error.response.status);
                 console.error("Response headers:", error.response.headers);
+                AsyncStorage.clear();
             } else if (error.request) {
                 // The request was made but no response was received
                 console.error("No response received, check your network connection.");
@@ -275,6 +280,9 @@ const DashboardScreen = ({ navigation }) => {
                             </View>
                         </>
                     )}
+                    {loading ? (
+                        <ActivityIndicator size="large" />
+                    ) : ''}
                     {cam == true && capturedImage == null ? (
                         <RNCamera
                             ref={cameraRef}
