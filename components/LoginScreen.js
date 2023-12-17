@@ -94,6 +94,7 @@ const LoginScreen = ({ navigation }) => {
                         mode="contained"
                         onPress={() => handleLogin()}
                         style={{ width: 200, backgroundColor: 'red', marginTop: 10 }}
+                        textColor='white'
                     >
                         Login
                     </Button>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
     },
     input: {
-        height: 25,
+        height: 30,
         margin: 5,
         borderWidth: 1,
         padding: 5,

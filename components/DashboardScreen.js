@@ -22,6 +22,7 @@ const DashboardScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
     const [visibleModal, setVisibleModal] = useState(false);
+    const [badge, setBadge] = useState('Beginner');
     //Confirmation
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -36,7 +37,26 @@ const DashboardScreen = ({ navigation }) => {
         }
     };
 
+    Geolocation.getCurrentPosition(
+        position => {
+            console.log('Current position:', position);
+            axios.get(
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCYxHTd4H5yAuZ3K6_MT1DuJ9XvDVhNTQs`
+            ).then(response => {
+                const firstAddress = response.data.results[0];
+                // if (firstAddress) {
+                setAddress(firstAddress.formatted_address);
+                // }
+            }).catch(error => console.error('Error fetching address:', error));
+        },
+        error => {
+            console.log('Error getting location:', error);
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+
     const uploadImage = async () => {
+        hideModal();
         setLoading(true);
         try {
             console.log(capturedImage.uri);
@@ -66,7 +86,6 @@ const DashboardScreen = ({ navigation }) => {
                 setCapturedImage(null);
                 setCam(false);
                 setLoading(false);
-                hideModal();
                 showModalNotif();
             }).catch((error) => {
                 if (error.response) {
@@ -105,23 +124,6 @@ const DashboardScreen = ({ navigation }) => {
     }
     useEffect(() => {
         fetchData();
-        Geolocation.getCurrentPosition(
-            position => {
-                console.log('Current position:', position);
-                axios.get(
-                    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCYxHTd4H5yAuZ3K6_MT1DuJ9XvDVhNTQs`
-                ).then(response => {
-                    const firstAddress = response.data.results[0];
-                    if (firstAddress) {
-                        setAddress(firstAddress.formatted_address);
-                    }
-                }).catch(error => console.error('Error fetching address:', error));
-            },
-            error => {
-                console.log('Error getting location:', error);
-            },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-        );
     }, []);
 
     const stations = () => {
@@ -156,9 +158,42 @@ const DashboardScreen = ({ navigation }) => {
         }
     }
 
+    const userbadge = () => {
+        if (token != '') {
+            const headers = { 'Authorization': `Bearer ${token}` };
+            axios.defaults.baseURL = 'https://firease.tech/api';
+            axios.defaults.headers.common = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': window.csrf_token,
+            }
+            axios.get('post/user/badge', {
+                headers
+            }).then((e) => {
+                setBadge(e.data.badge);
+                // e.data.badge > 2 ? setBadge('Good Samaritan') : null;
+            }).catch((error) => {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    console.error('ERRRORRRR');
+                    console.error("Response data:", error.response.data);
+                    console.error("Response status:", error.response.status);
+                    console.error("Response headers:", error.response.headers);
+                    AsyncStorage.clear();
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.error("No response received, check your network connection.");
+                } else {
+                    // Something happened in setting up the request
+                    console.error("Error message:", error.message);
+                }
+            });
+        }
+    }
+    userbadge();
+
     useEffect(() => {
         stations();
-    }, [])
+    }, []);
 
     const handleLogout = () => {
         const headers = { 'Authorization': `Bearer ${token}` };
@@ -167,10 +202,7 @@ const DashboardScreen = ({ navigation }) => {
             headers
         }).then((e) => {
             console.log(e.data);
-            AsyncStorage.removeItem('userToken');
-            AsyncStorage.removeItem('user');
-            AsyncStorage.removeItem('userAvatar');
-            AsyncStorage.removeItem('userPhone');
+            AsyncStorage.clear();
             navigation.navigate('GetStarted');
         }).catch((error) => {
             if (error.response) {
@@ -237,7 +269,7 @@ const DashboardScreen = ({ navigation }) => {
                             source={require('../assets/logo.png')}
                             style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                         />
-                        <Text variant='labelSmall' style={{ color: '#B09E40' }}>Responder</Text>
+                        <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>
                     </View>
                 </View>
                 <Button title="Logout" onPress={handleLogout} />
@@ -341,7 +373,9 @@ const DashboardScreen = ({ navigation }) => {
                             </Modal>
                         </Portal>
                         {loading ? (
-                            <ActivityIndicator size="large" />
+                            <View style={styles.overlay}>
+                                <ActivityIndicator size="large" />
+                            </View>
                         ) : ''}
                         {cam == true && capturedImage == null ? (
                             <RNCamera
@@ -433,6 +467,12 @@ const styles = StyleSheet.create({
     instructionText: {
         marginBottom: 10,
         fontWeight: 'bold',
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

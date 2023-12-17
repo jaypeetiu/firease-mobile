@@ -117,6 +117,9 @@ export default RegisterScreen = ({ navigation }) => {
                             style={styles.input}
                             textContentType="password"
                         />
+                        {password.length > 0 && password.length < 8 && (
+                            <Text style={{color: 'red', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
+                        )}
                         <TextInput
                             placeholder="New Password"
                             value={confirmPassword}
@@ -125,6 +128,9 @@ export default RegisterScreen = ({ navigation }) => {
                             style={styles.input}
                             textContentType="newPassword"
                         />
+                        {confirmPassword.length > 0 && confirmPassword.length < 8 && (
+                            <Text style={{color: 'red', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
+                        )}
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Checkbox
                                 status={checked ? 'checked' : 'unchecked'}
@@ -141,7 +147,7 @@ export default RegisterScreen = ({ navigation }) => {
                         mode="contained"
                         style={{ width: 200, backgroundColor: '#F78900', marginTop: 20, alignSelf: 'center', borderWidth: 2, borderColor: '#fff' }}
                         textColor="#fff"
-                        onPress={() => handleNext()}
+                        onPress={() => confirmPassword.length < 8 && password.length < 8 ? false:handleNext()}
                     >
                         NEXT
                     </Button>
@@ -188,7 +194,7 @@ const styles = StyleSheet.create({
         bottom: 0
     },
     input: {
-        height: 25,
+        height: 30,
         margin: 5,
         borderWidth: 1,
         padding: 5,

@@ -6,6 +6,14 @@ import { Appbar } from "react-native-paper";
 
 export default GetStartedScreen = ({ navigation }) => {
 
+    useEffect(async()=>{
+        const token = await AsyncStorage.getItem('userToken');
+        console.log(token);
+        if(token !== null){
+            navigation.navigate('Login');    
+        }
+    }, []);
+
     const handleNext = () => {
         navigation.navigate('Guidelines');
     };

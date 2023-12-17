@@ -12,6 +12,7 @@ const NewsScreen = ({ navigation }) => {
     const [user, setUser] = useState();
     const [phone, setPhone] = useState();
     const phoneNumber = 'tel:+123456789'; // Replace with your actual telephone number
+    const [badge, setBadge] = useState('Beginner');
     async function fetchData() {
         const value = await AsyncStorage.getItem('userToken');
         const user = await AsyncStorage.getItem('user');
@@ -37,6 +38,38 @@ const NewsScreen = ({ navigation }) => {
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
         );
     }, []);
+
+    const userbadge = () => {
+        if (token != '') {
+            const headers = { 'Authorization': `Bearer ${token}` };
+            axios.defaults.baseURL = 'https://firease.tech/api';
+            axios.defaults.headers.common = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': window.csrf_token,
+            }
+            axios.get('post/user/badge', {
+                headers
+            }).then((e) => {
+                setBadge(e.data.badge);
+            }).catch((error) => {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    console.error('ERRRORRRR');
+                    console.error("Response data:", error.response.data);
+                    console.error("Response status:", error.response.status);
+                    console.error("Response headers:", error.response.headers);
+                    AsyncStorage.clear();
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.error("No response received, check your network connection.");
+                } else {
+                    // Something happened in setting up the request
+                    console.error("Error message:", error.message);
+                }
+            });
+        }
+    }
+    userbadge();
 
     const handleNews = () => {
         navigation.navigate('Blog', {
@@ -75,7 +108,7 @@ const NewsScreen = ({ navigation }) => {
                         source={require('../assets/logo.png')}
                         style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                     />
-                    <Text variant='labelSmall' style={{ color: '#B09E40' }}>Responder</Text>
+                    <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>
                 </View>
             </View>
             <View style={styles.container}>
