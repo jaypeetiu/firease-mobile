@@ -272,7 +272,7 @@ const DashboardScreen = ({ navigation }) => {
                         <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>
                     </View>
                 </View>
-                <Button title="Logout" onPress={handleLogout} />
+                {/* <Button title="Logout" onPress={handleLogout} /> */}
                 <Text variant='titleLarge' style={{ color: '#9B0103', fontWeight: 'bold', marginHorizontal: 10 }}>FIRE STATION NEARBY</Text>
                 <View style={{ flexDirection: 'column' }}>
                     <MapView

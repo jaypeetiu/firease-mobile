@@ -5,20 +5,20 @@ import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";
 
 export default GuidelinesScreen = ({ navigation }) => {
+    useEffect(async()=>{
+        const token = await AsyncStorage.getItem('userToken');
+        console.log(token);
+        if(token !== null){
+            navigation.navigate('Login');    
+        }
+    }, []);
+    
     const handleNext = () => {
         navigation.navigate('NoteScreen');
     };
 
     return (
         <View style={styles.container}>
-            {/* <Appbar.Header style={{ backgroundColor: '#F78900' }}>
-                <Appbar.Content title={"Welcome"} color="#000"/>
-            </Appbar.Header> */}
-            {/* <Avatar.Image
-                size={150}
-                source={require('../assets/logo.png')}
-                style={{ backgroundColor: '#000', alignSelf: 'center', marginTop: '10%' }}
-            /> */}
             <View style={styles.content}>
                 <Text
                     variant="titleLarge"

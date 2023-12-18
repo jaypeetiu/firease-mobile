@@ -15,6 +15,11 @@ import FireSafetyScreen from './components/FireSafetyScreen';
 import FirstAidScreen from './components/FirstAidScreen';
 import BFPScreen from './components/BFPScreen';
 import CitizenScreen from './components/CitizenScreen';
+import SettingScreen from './components/SettingScreen';
+import ProfileScreen from './components/ProfileScreen';
+import UserSettingsScreen from './components/UserSettingsScreen';
+import AboutScreen from './components/AboutScreen';
+import LegalScreen from './components/LegalScreen';
 
 const Stack = createStackNavigator();
 
@@ -57,10 +62,15 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainApp" component={MainAppScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Blog" component={BlogScreen} options={{headerShown: false}} />
+        <Stack.Screen name="UserProfile" component={ProfileScreen} options={{headerShown: false}} />
         <Stack.Screen name="FireSafety" component={FireSafetyScreen} options={{headerShown: false}} />
         <Stack.Screen name="FirstAid" component={FirstAidScreen} options={{headerShown: false}} />
         <Stack.Screen name="BFP" component={BFPScreen} options={{headerShown: false}} />
         <Stack.Screen name="Citizen" component={CitizenScreen} options={{headerShown: false}} />
+        <Stack.Screen name="Settings" component={SettingScreen} options={{headerShown: false}} />
+        <Stack.Screen name="UserSettings" component={UserSettingsScreen} options={{headerShown: false}} />
+        <Stack.Screen name="About" component={AboutScreen} options={{headerShown: false}} />
+        <Stack.Screen name="Legal" component={LegalScreen} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -16,51 +16,18 @@ export default RegisterScreen = ({ navigation }) => {
     const [message, setMessage] = useState('');
     const [visible, setVisible] = useState(false);
 
+    useEffect(async()=>{
+        const token = await AsyncStorage.getItem('userToken');
+        console.log(token);
+        if(token !== null){
+            navigation.navigate('Login');    
+        }
+    }, []);
+
     const showDialog = () => setVisible(true);
 
     const hideDialog = () => setVisible(false);
 
-    // const handleRegister = () => {
-    //     const formData = new FormData();
-    //     formData.append('name', name);
-    //     formData.append('email', email);
-    //     formData.append('password', password);
-    //     formData.append('password_confirmation', confirmPassword);
-    //     try {
-    //         axios.defaults.baseURL = 'https://1d89-112-198-99-52.ngrok-free.app/api';
-    //         axios.defaults.headers.common = {
-    //             'X-Requested-With': 'XMLHttpRequest',
-    //             'X-CSRF-TOKEN': window.csrf_token,
-    //         }
-    //         axios.post('auth/register', formData,
-    //             {
-    //                 headers: {
-    //                     'Content-Type': 'multipart/form-data',
-    //                 },
-    //             }).then((e) => {
-    //                 console.log(e.data.message);
-    //                 setMessage(e.data.message);
-    //                 showDialog();
-    //             }).catch((error) => {
-    //                 if (error.response) {
-    //                     // The request was made and the server responded with a status code
-    //                     console.error("Response data:", error.response.data);
-    //                     console.error("Response status:", error.response.status);
-    //                     console.error("Response headers:", error.response.headers);
-    //                     setMessage(error.response.data.errors.password);
-    //                     showDialog();
-    //                 } else if (error.request) {
-    //                     // The request was made but no response was received
-    //                     console.error("No response received, check your network connection.");
-    //                 } else {
-    //                     // Something happened in setting up the request
-    //                     console.error("Error message:", error.message);
-    //                 }
-    //             });
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
     const handleNext = () => {
         navigation.navigate('AttachFile', {
             data: {
@@ -95,12 +62,14 @@ export default RegisterScreen = ({ navigation }) => {
                             value={name}
                             onChangeText={setName}
                             style={styles.input}
+                            mode='outlined'
                         />
                         <TextInput
                             placeholder="Email"
                             value={email}
                             onChangeText={setEmail}
                             style={styles.input}
+                            mode='outlined'
                         />
                         <TextInput
                             placeholder="Phone number"
@@ -108,6 +77,7 @@ export default RegisterScreen = ({ navigation }) => {
                             onChangeText={setPhone}
                             style={styles.input}
                             inputMode="tel"
+                            mode='outlined'
                         />
                         <TextInput
                             placeholder="Password"
@@ -116,6 +86,7 @@ export default RegisterScreen = ({ navigation }) => {
                             secureTextEntry
                             style={styles.input}
                             textContentType="password"
+                            mode='outlined'
                         />
                         {password.length > 0 && password.length < 8 && (
                             <Text style={{color: 'red', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
@@ -127,6 +98,7 @@ export default RegisterScreen = ({ navigation }) => {
                             secureTextEntry
                             style={styles.input}
                             textContentType="newPassword"
+                            mode='outlined'
                         />
                         {confirmPassword.length > 0 && confirmPassword.length < 8 && (
                             <Text style={{color: 'red', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
@@ -139,10 +111,10 @@ export default RegisterScreen = ({ navigation }) => {
                                 }}
                                 color='white'
                             />
-                            <Text variant="labelSmall" style={{ color: '#FFFFFF' }}>I agree with privacy and policy</Text>
+                            <Text variant="labelSmall" style={{ color: '#FFFFFF', fontSize: 12 }}>I agree with privacy and policy</Text>
                         </View>
                     </View>
-                    <Text variant="labelSmall" style={{ color: '#FFFFFF', textAlign: 'center', marginTop: 20 }}>Already have an account? <Text style={{ color: '#FFFF', fontWeight: 'bold' }} onPress={() => handleLogin()}>Login</Text></Text>
+                    <Text variant="labelSmall" style={{ color: '#FFFFFF', textAlign: 'center', marginTop: 20, fontSize: 12 }}>Already have an account? <Text style={{ color: '#FFFF', fontWeight: 'bold', fontSize: 12 }} onPress={() => handleLogin()}>Login</Text></Text>
                     <Button
                         mode="contained"
                         style={{ width: 200, backgroundColor: '#F78900', marginTop: 20, alignSelf: 'center', borderWidth: 2, borderColor: '#fff' }}
@@ -196,8 +168,8 @@ const styles = StyleSheet.create({
     input: {
         height: 30,
         margin: 5,
-        borderWidth: 1,
+        // borderWidth: 1,
         padding: 5,
-        fontSize: 12,
+        fontSize: 14,
     },
 });

@@ -10,6 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardScreen from './DashboardScreen';
 import NewsScreen from './NewsScreen';
+import SettingScreen from './SettingScreen';
 
 const MainAppScreen = ({ navigation }) => {
     const Tab = createBottomTabNavigator();
@@ -45,7 +46,7 @@ const MainAppScreen = ({ navigation }) => {
             />
             <Tab.Screen
                 name="Profile"
-                component={NewsScreen}
+                component={SettingScreen}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color, size }) => (

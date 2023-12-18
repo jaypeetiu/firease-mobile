@@ -46,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
                 setLocalStorageItem("userID", JSON.stringify(e.data.user.id), 9999);
                 setLocalStorageItem("user", e.data.user.name, 9999);
                 setLocalStorageItem("userAvatar", e.data.user.avatar, 9999);
-                e.data.user?.phone_number?setLocalStorageItem("userPhone", e.data.user.phone_number, 9999):false;
+                setLocalStorageItem("userPhone", e.data.user.phone_number?e.data.user.phone_number:'No Phone number', 9999);
                 navigation.navigate('MainApp');
             }).catch((error) => {
                 if (error.response) {
@@ -81,6 +81,7 @@ const LoginScreen = ({ navigation }) => {
                         value={email}
                         onChangeText={setEmail}
                         style={styles.input}
+                        mode='outlined'
                     />
                     <TextInput
                         placeholder="Password"
@@ -89,6 +90,7 @@ const LoginScreen = ({ navigation }) => {
                         secureTextEntry
                         style={styles.input}
                         textContentType="password"
+                        mode='outlined'
                     />
                     <Button
                         mode="contained"
@@ -112,9 +114,8 @@ const styles = StyleSheet.create({
     input: {
         height: 30,
         margin: 5,
-        borderWidth: 1,
         padding: 5,
-        fontSize: 12,
+        fontSize: 14,
         width: 300,
         top: 5,
     },
