@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useRoute } from '@react-navigation/native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import { setLocalStorageItem } from '../utils/setLocalStorageItem';
 
 export default ProfileScreen = ({ navigation }) => {
     const route = useRoute();
@@ -65,6 +66,7 @@ export default ProfileScreen = ({ navigation }) => {
                             },
                         }).then((e) => {
                             console.log(e.data.selfieImage);
+                            setLocalStorageItem("userAvatar", e.data.selfieImage, 9999);
                             setLoading(false);
                             Dialog.show({
                                 closeOnOverlayTap: true,
@@ -113,7 +115,7 @@ export default ProfileScreen = ({ navigation }) => {
                         <Text variant='titleMedium' style={{ color: 'white' }}>{receivedValue.phone}</Text>
                     </View>
                     <TouchableOpacity onPress={takeSelfie} style={{ flexDirection: 'column', marginVertical: 10, borderWidth: 1, borderRadius: 50, marginHorizontal: 100, padding: 5, borderColor: '#FFF' }}>
-                        <Text style={{ alignSelf: 'center', fontSize: 12, color: '#FFF' }}>Edit Profile</Text>
+                        <Text style={{ alignSelf: 'center', fontSize: 12, color: '#FFF' }}>Upload Profile</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'column' }}>
