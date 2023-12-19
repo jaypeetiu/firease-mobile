@@ -269,7 +269,7 @@ const DashboardScreen = ({ navigation }) => {
                     <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                         <Avatar.Image
                             size={60}
-                            source={avatar? { uri: avatar }:require('../assets/logo.png')}
+                            source={avatar ? { uri: avatar } : require('../assets/logo.png')}
                             style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                         />
                         <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>
@@ -375,11 +375,6 @@ const DashboardScreen = ({ navigation }) => {
                                 </View>
                             </Modal>
                         </Portal>
-                        {loading ? (
-                            <View style={styles.overlay}>
-                                <ActivityIndicator size="large" />
-                            </View>
-                        ) : ''}
                         {cam == true && capturedImage == null ? (
                             <RNCamera
                                 ref={cameraRef}
@@ -430,6 +425,11 @@ const DashboardScreen = ({ navigation }) => {
                     </Text>
                 </View>
             </ScrollView>
+            {loading ? (
+                <View style={styles.overlay}>
+                    <ActivityIndicator size="large" />
+                </View>
+            ) : ''}
         </PaperProvider>
     );
 };
