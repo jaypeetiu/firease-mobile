@@ -20,6 +20,8 @@ import ProfileScreen from './components/ProfileScreen';
 import UserSettingsScreen from './components/UserSettingsScreen';
 import AboutScreen from './components/AboutScreen';
 import LegalScreen from './components/LegalScreen';
+import HelpScreen from './components/HelpScreen';
+import HistoryScreen from './components/HistoryScreen';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +73,8 @@ export default function App() {
         <Stack.Screen name="UserSettings" component={UserSettingsScreen} options={{headerShown: false}} />
         <Stack.Screen name="About" component={AboutScreen} options={{headerShown: false}} />
         <Stack.Screen name="Legal" component={LegalScreen} options={{headerShown: false}} />
+        <Stack.Screen name="Help" component={HelpScreen} options={{headerShown: false}} />
+        <Stack.Screen name="History" component={HistoryScreen} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

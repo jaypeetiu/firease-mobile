@@ -11,15 +11,18 @@ const SettingScreen = ({ navigation }) => {
     const [token, setUserToken] = useState('');
     const [user, setUser] = useState();
     const [phone, setPhone] = useState();
+    const [avatar, setAvatar] = useState();
     const [badge, setBadge] = useState('Beginner');
     async function fetchData() {
         const value = await AsyncStorage.getItem('userToken');
         const user = await AsyncStorage.getItem('user');
         const phone = await AsyncStorage.getItem('userPhone');
+        const avatar = await AsyncStorage.getItem('userAvatar');
         console.log(value);
         setUserToken(value);
         setUser(user);
         setPhone(phone);
+        setAvatar(avatar);
         if (value == null && !value) {
             navigation.navigate('Login');
         }
@@ -67,6 +70,7 @@ const SettingScreen = ({ navigation }) => {
                 'user': user,
                 'phone': phone,
                 'badge': badge,
+                'avatar': avatar,
             }
         });
     }
@@ -78,10 +82,34 @@ const SettingScreen = ({ navigation }) => {
                 'user': user,
                 'phone': phone,
                 'badge': badge,
+                'avatar': avatar,
             }
         });
     }
 
+    const handleHelp = () => {
+        navigation.navigate('Help', {
+            data: {
+                'token': token,
+                'user': user,
+                'phone': phone,
+                'badge': badge,
+                'avatar': avatar,
+            }
+        });
+    }
+
+    const handleHistory = () => {
+        navigation.navigate('History', {
+            data: {
+                'token': token,
+                'user': user,
+                'phone': phone,
+                'badge': badge,
+                'avatar': avatar,
+            }
+        });
+    }
     return (
         <ScrollView style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', height: 120, backgroundColor: '#9B0103' }}>
@@ -92,7 +120,7 @@ const SettingScreen = ({ navigation }) => {
                 <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                     <Avatar.Image
                         size={60}
-                        source={require('../assets/logo.png')}
+                        source={avatar? { uri: avatar }:require('../assets/logo.png')}
                         style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                     />
                     <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>
@@ -145,7 +173,7 @@ const SettingScreen = ({ navigation }) => {
                         />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ flexDirection: 'row', marginVertical: 30 }}>
+                <TouchableOpacity onPress={() => { handleHelp() }} style={{ flexDirection: 'row', marginVertical: 30 }}>
                     <View style={{ width: 100 }}>
                         <Image
                             source={require('../assets/help.png')}
@@ -168,7 +196,7 @@ const SettingScreen = ({ navigation }) => {
                         />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ flexDirection: 'row', marginVertical: 30 }}>
+                <TouchableOpacity onPress={() => { handleHistory() }} style={{ flexDirection: 'row', marginVertical: 30 }}>
                     <View style={{ width: 100 }}>
                         <Image
                             source={require('../assets/history.png')}

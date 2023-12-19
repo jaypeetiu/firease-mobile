@@ -13,6 +13,7 @@ const DashboardScreen = ({ navigation }) => {
     const [userID, setUserID] = useState();
     const [user, setUser] = useState();
     const [phone, setPhone] = useState();
+    const [avatar, setAvatar] = useState();
     const [locations, setLocations] = useState([]);
     const phoneNumber = 'tel:911'; // Replace with your actual telephone number
     const cameraRef = useRef(null);
@@ -113,11 +114,13 @@ const DashboardScreen = ({ navigation }) => {
         const ID = await AsyncStorage.getItem('userID');
         const user = await AsyncStorage.getItem('user');
         const phone = await AsyncStorage.getItem('userPhone');
-        console.log(value);
+        const avatar = await AsyncStorage.getItem('userAvatar');
+        console.log(avatar);
         setUserToken(value);
         setUserID(ID);
         setUser(user);
         setPhone(phone);
+        setAvatar(avatar);
         if (value == null && !value) {
             navigation.navigate('Login');
         }
@@ -266,7 +269,7 @@ const DashboardScreen = ({ navigation }) => {
                     <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                         <Avatar.Image
                             size={60}
-                            source={require('../assets/logo.png')}
+                            source={avatar? { uri: avatar }:require('../assets/logo.png')}
                             style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                         />
                         <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>

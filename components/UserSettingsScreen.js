@@ -72,7 +72,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                     <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                         <Avatar.Image
                             size={60}
-                            source={require('../assets/logo.png')}
+                            source={receivedValue.avatar? { uri: receivedValue.avatar }:require('../assets/logo.png')}
                             style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                         />
                         <Text variant='labelSmall' style={{ color: '#B09E40' }}>{receivedValue.badge}</Text>
@@ -97,7 +97,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                     </Text>
                     <TouchableOpacity onPress={() => { handleAbout() }} style={{ flexDirection: 'row', marginVertical: 30 }}>
                         <Image
-                            source={require('../assets/profile.png')}
+                            source={require('../assets/help-about.png')}
                             style={{ backgroundColor: '#fff', alignSelf: 'center', margin: 10, marginHorizontal: 30, marginBottom: 5 }}
                         />
                         <Text style={{
@@ -115,7 +115,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { handleLegal() }} style={{ flexDirection: 'row', marginVertical: 30 }}>
                         <Image
-                            source={require('../assets/profile.png')}
+                            source={require('../assets/contract.png')}
                             style={{ backgroundColor: '#fff', alignSelf: 'center', margin: 10, marginHorizontal: 30, marginBottom: 5 }}
                         />
                         <Text style={{
@@ -133,7 +133,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={{ flexDirection: 'row', marginVertical: 30 }}>
                         <Image
-                            source={require('../assets/profile.png')}
+                            source={require('../assets/delete.png')}
                             style={{ backgroundColor: '#fff', alignSelf: 'center', margin: 10, marginHorizontal: 30, marginBottom: 5 }}
                         />
                         <Text style={{

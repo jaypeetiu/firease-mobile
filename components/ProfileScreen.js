@@ -35,7 +35,7 @@ export default ProfileScreen = ({ navigation }) => {
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginVertical: 20 }} >
                         <Avatar.Image
                             size={60}
-                            source={require('../assets/logo.png')}
+                            source={receivedValue.avatar? { uri: receivedValue.avatar }:require('../assets/logo.png')}
                             style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                         />
                         <Text variant='labelSmall' style={{ color: '#B09E40' }}>{receivedValue.badge}</Text>

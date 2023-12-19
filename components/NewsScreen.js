@@ -11,16 +11,18 @@ const NewsScreen = ({ navigation }) => {
     const [token, setUserToken] = useState('');
     const [user, setUser] = useState();
     const [phone, setPhone] = useState();
+    const [avatar, setAvatar] = useState();
     const phoneNumber = 'tel:+123456789'; // Replace with your actual telephone number
     const [badge, setBadge] = useState('Beginner');
     async function fetchData() {
         const value = await AsyncStorage.getItem('userToken');
         const user = await AsyncStorage.getItem('user');
         const phone = await AsyncStorage.getItem('userPhone');
-        console.log(value);
+        const avatar = await AsyncStorage.getItem('userAvatar');
         setUserToken(value);
         setUser(user);
         setPhone(phone);
+        setAvatar(avatar);
         if (value == null && !value) {
             navigation.navigate('Login');
         }
@@ -105,7 +107,7 @@ const NewsScreen = ({ navigation }) => {
                 <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                     <Avatar.Image
                         size={60}
-                        source={require('../assets/logo.png')}
+                        source={avatar? { uri: avatar }:require('../assets/logo.png')}
                         style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                     />
                     <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>

@@ -41,7 +41,7 @@ const MainAppScreen = ({ navigation }) => {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="bell" color={color} size={size} />
                     ),
-                    tabBarBadge: 3,
+                    // tabBarBadge: 3,
                 }}
             />
             <Tab.Screen
