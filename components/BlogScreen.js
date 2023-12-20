@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import react, { useEffect, useState } from "react";
-import { Image, ScrollView, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, View, StyleSheet } from "react-native";
 import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";
 import { useRoute } from '@react-navigation/native';
@@ -11,8 +11,10 @@ export default BlogScreen = ({ navigation }) => {
     const receivedValue = route.params?.data || 'Default Value';
     const [news, setNews] = useState();
     const [newsLists, setNewsLists] = useState();
+    const [loading, setLoading] = useState(false);
 
     const handleNews = async () => {
+        setLoading(true)
         axios.defaults.baseURL = 'https://firease.tech/api';
         axios.defaults.headers.common = {
             'X-Requested-With': 'XMLHttpRequest',
@@ -26,6 +28,7 @@ export default BlogScreen = ({ navigation }) => {
             console.log(e.data.lists.data)
             setNews(e.data.news);
             setNewsLists(e.data.lists.data);
+            setLoading(false);
         }).catch((error) => {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -105,6 +108,22 @@ export default BlogScreen = ({ navigation }) => {
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '50%' }}>31 Killed In Fire On Philippine Ferry, Several Missing</Text>
                 </View> */}
             </ScrollView>
+            {loading ? (
+                <View style={styles.overlay}>
+                    <ActivityIndicator size="large" />
+                </View>
+            ) : ''}
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 100,
+        height: '100%',
+    },
+});

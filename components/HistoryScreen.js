@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image, ActivityIndicator } from 'react-native';
 import { Avatar, Button, Dialog, Surface, Text, TextInput } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
@@ -12,8 +12,10 @@ export default HistoryScreen = ({ navigation }) => {
     const route = useRoute();
     const receivedValue = route.params?.data || 'Default Value';
     const [histories, setHistory] = useState();
+    const [loading, setLoading] = useState(false);
 
     const stations = () => {
+        setLoading(true);
         if (receivedValue.token != '') {
             const headers = { 'Authorization': `Bearer ${receivedValue.token}` };
             axios.defaults.baseURL = 'https://firease.tech/api';
@@ -26,6 +28,7 @@ export default HistoryScreen = ({ navigation }) => {
             }).then((e) => {
                 console.log(e.data.histories);
                 setHistory(e.data.histories);
+                setLoading(false);
             }).catch((error) => {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -100,7 +103,22 @@ export default HistoryScreen = ({ navigation }) => {
 
                 </View>
             </ScrollView>
+            {loading ? (
+                <View style={styles.overlay}>
+                    <ActivityIndicator size="large" />
+                </View>
+            ) : ''}
         </View >
 
     );
 };
+const styles = StyleSheet.create({
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 100,
+        height: '100%',
+    },
+});

@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Avatar, Button, Checkbox, Text, TextInput, Dialog, Portal, PaperProvider } from "react-native-paper";
 import { setLocalStorageItem } from '../utils/setLocalStorageItem';
 // import ImagePicker from 'react-native-image-picker';
@@ -18,6 +18,7 @@ export default AttachFileScreen = ({ navigation }) => {
     const [image, setImage] = useState(null);
     const [selfieUri, setSelfieUri] = useState(null);
     const [checked, setChecked] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const showDialog = () => setVisible(true);
 
@@ -53,6 +54,7 @@ export default AttachFileScreen = ({ navigation }) => {
     };
 
     const handleSubmit = () => {
+        setLoading(true);
         const formData = new FormData();
         formData.append('name', receivedValue.name);
         formData.append('email', receivedValue.email);
@@ -83,6 +85,7 @@ export default AttachFileScreen = ({ navigation }) => {
                 }).then((e) => {
                     console.log(e.data.message);
                     setMessage(e.data.message);
+                    setLoading(false);
                     showDialog();
                 }).catch((error) => {
                     if (error.response) {
@@ -165,6 +168,11 @@ export default AttachFileScreen = ({ navigation }) => {
                     <Button onPress={hideDialog}>Done</Button>
                 </Dialog.Actions>
             </Dialog>
+            {loading ? (
+                <View style={styles.overlay}>
+                    <ActivityIndicator size="large" />
+                </View>
+            ) : ''}
         </>
     );
 };
@@ -200,5 +208,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 5,
         fontSize: 12,
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 100,
+        height: '100%',
     },
 });
