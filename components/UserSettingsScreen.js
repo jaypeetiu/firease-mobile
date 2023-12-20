@@ -45,6 +45,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                 'user': receivedValue.user,
                 'phone': receivedValue.phone,
                 'badge': receivedValue.badge,
+                'avatar': receivedValue.avatar,
             }
         });
     }
@@ -56,6 +57,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                 'user': receivedValue.user,
                 'phone': receivedValue.phone,
                 'badge': receivedValue.badge,
+                'avatar': receivedValue.avatar,
             }
         });
     }
