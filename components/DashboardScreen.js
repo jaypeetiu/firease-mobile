@@ -41,6 +41,7 @@ const DashboardScreen = ({ navigation }) => {
     Geolocation.getCurrentPosition(
         position => {
             console.log('Current position:', position);
+            setLoading(true);
             axios.get(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCYxHTd4H5yAuZ3K6_MT1DuJ9XvDVhNTQs`
             ).then(response => {
@@ -49,6 +50,8 @@ const DashboardScreen = ({ navigation }) => {
                 setAddress(firstAddress.formatted_address);
                 // }
             }).catch(error => console.error('Error fetching address:', error));
+            console.log(address);
+            setLoading(false);
         },
         error => {
             console.log('Error getting location:', error);
