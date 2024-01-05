@@ -29,16 +29,6 @@ const NewsScreen = ({ navigation }) => {
     }
     useEffect(() => {
         fetchData();
-        Geolocation.getCurrentPosition(
-            position => {
-                console.log('Current position:', position);
-                // Handle the location data
-            },
-            error => {
-                console.log('Error getting location:', error);
-            },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-        );
     }, []);
 
     const userbadge = () => {
