@@ -61,6 +61,7 @@ export default AttachFileScreen = ({ navigation }) => {
         formData.append('password', receivedValue.password);
         formData.append('password_confirmation', receivedValue.password_confirmation);
         formData.append('phone_number', receivedValue.phone_number);
+        formData.append('age', receivedValue.age);
         formData.append('id_image', {
             uri: image.uri,
             type: image.type,
@@ -94,13 +95,20 @@ export default AttachFileScreen = ({ navigation }) => {
                         console.error("Response status:", error.response.status);
                         console.error("Response headers:", error.response.headers);
                         setMessage(error.response.data.message);
+                        setLoading(false);
                         showDialog();
                     } else if (error.request) {
                         // The request was made but no response was received
                         console.error("No response received, check your network connection.");
+                        setMessage("No response received, check your network connection.");
+                        setLoading(false);
+                        showDialog();
                     } else {
                         // Something happened in setting up the request
                         console.error("Error message:", error.message);
+                        setMessage("No response received, check your network connection.");
+                        setLoading(false);
+                        showDialog();
                     }
                 });
         } catch (error) {

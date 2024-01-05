@@ -15,6 +15,7 @@ export default RegisterScreen = ({ navigation }) => {
     const [checked, setChecked] = useState(false);
     const [message, setMessage] = useState('');
     const [visible, setVisible] = useState(false);
+    const [age, setAge] = useState('');
 
     useEffect(async()=>{
         const token = await AsyncStorage.getItem('userToken');
@@ -36,6 +37,7 @@ export default RegisterScreen = ({ navigation }) => {
                 'password': password,
                 'password_confirmation': confirmPassword,
                 'phone_number': phone,
+                'age': age,
             }
         });
     }
@@ -68,6 +70,13 @@ export default RegisterScreen = ({ navigation }) => {
                             placeholder="Email"
                             value={email}
                             onChangeText={setEmail}
+                            style={styles.input}
+                            mode='outlined'
+                        />
+                        <TextInput
+                            placeholder="Age"
+                            value={age}
+                            onChangeText={setAge}
                             style={styles.input}
                             mode='outlined'
                         />
