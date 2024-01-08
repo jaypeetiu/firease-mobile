@@ -50,7 +50,7 @@ const SettingScreen = ({ navigation }) => {
                     console.error("Response data:", error.response.data);
                     console.error("Response status:", error.response.status);
                     console.error("Response headers:", error.response.headers);
-                    AsyncStorage.clear();
+                    // AsyncStorage.clear();
                 } else if (error.request) {
                     // The request was made but no response was received
                     console.error("No response received, check your network connection.");
