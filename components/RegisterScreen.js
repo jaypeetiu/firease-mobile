@@ -57,7 +57,7 @@ export default RegisterScreen = ({ navigation }) => {
                         CREATE ACCOUNT
                     </Text>
                     <View
-                        style={{ width: 300, marginTop: '10%', borderWidth: 1, borderRadius: 20, padding: 10, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103', marginHorizontal: 15 }}
+                        style={{ width: 300, marginTop: '5%', borderWidth: 1, borderRadius: 20, padding: 10, borderColor: '#000', color: '#fff', backgroundColor: '#9B0103', marginHorizontal: 15 }}
                     >
                         <TextInput
                             placeholder="Name"
@@ -98,7 +98,7 @@ export default RegisterScreen = ({ navigation }) => {
                             mode='outlined'
                         />
                         {password.length > 0 && password.length < 8 && (
-                            <Text style={{color: 'red', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
+                            <Text style={{color: 'white', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
                         )}
                         <TextInput
                             placeholder="New Password"
@@ -110,7 +110,7 @@ export default RegisterScreen = ({ navigation }) => {
                             mode='outlined'
                         />
                         {confirmPassword.length > 0 && confirmPassword.length < 8 && (
-                            <Text style={{color: 'red', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
+                            <Text style={{color: 'white', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Password should have at least 8 characters</Text>
                         )}
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Checkbox
