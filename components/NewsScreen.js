@@ -72,19 +72,35 @@ const NewsScreen = ({ navigation }) => {
     }
 
     const handleAid = () => {
-        navigation.navigate('FirstAid');
+        navigation.navigate('FirstAid', {
+            data: {
+                'token': token,
+            }
+        });
     }
 
     const handleSafety = () => {
-        navigation.navigate('FireSafety');
+        navigation.navigate('FireSafety', {
+            data: {
+                'token': token,
+            }
+        });
     }
 
     const handleAbout = () => {
-        navigation.navigate('BFP');
+        navigation.navigate('BFP', {
+            data: {
+                'token': token,
+            }
+        });
     }
 
     const handleCitizen = () => {
-        navigation.navigate('Citizen');
+        navigation.navigate('Citizen', {
+            data: {
+                'token': token,
+            }
+        });
     }
 
     return (
@@ -97,7 +113,7 @@ const NewsScreen = ({ navigation }) => {
                 <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }} >
                     <Avatar.Image
                         size={60}
-                        source={avatar? { uri: avatar }:require('../assets/logo.png')}
+                        source={avatar ? { uri: avatar } : require('../assets/logo.png')}
                         style={{ backgroundColor: '#000', alignSelf: 'center', borderWidth: 1, borderColor: '#B09E40' }}
                     />
                     <Text variant='labelSmall' style={{ color: '#B09E40' }}>{badge}</Text>

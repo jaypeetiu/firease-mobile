@@ -9,6 +9,7 @@ import { setLocalStorageItem } from '../utils/setLocalStorageItem';
 // import * as ImagePicker from 'react-native-image-picker';
 import { launchImageLibrary } from 'react-native-image-picker'
 import { useRoute } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 
 export default AttachFileScreen = ({ navigation }) => {
     const route = useRoute();
@@ -19,6 +20,43 @@ export default AttachFileScreen = ({ navigation }) => {
     const [selfieUri, setSelfieUri] = useState(null);
     const [checked, setChecked] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [ids, setIDs] = useState();
+    const [selectedValue, setSelectedValue] = useState(null);
+
+    const handleID = async () => {
+        axios.defaults.baseURL = 'https://firease.tech/api';
+        axios.defaults.headers.common = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': window.csrf_token,
+        }
+        await axios.get('idlists').then((e) => {
+            console.log(e.data.ids.data);
+            setIDs(e.data.ids.data);
+        }).catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                console.error(receivedValue.token);
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("No response received, check your network connection.");
+            } else {
+                // Something happened in setting up the request
+                console.error("Error message:", error.message);
+            }
+        });
+    }
+
+    useEffect(() => {
+        handleID();
+    }, []);
+
+    const handleValueChange = (itemValue) => {
+        // Do something with the selected value
+        setSelectedValue(itemValue);
+    };
 
     const showDialog = () => setVisible(true);
 
@@ -62,6 +100,7 @@ export default AttachFileScreen = ({ navigation }) => {
         formData.append('password_confirmation', receivedValue.password_confirmation);
         formData.append('phone_number', receivedValue.phone_number);
         formData.append('age', receivedValue.age);
+        formData.append('id_type', selectedValue);
         formData.append('id_image', {
             uri: image.uri,
             type: image.type,
@@ -144,6 +183,16 @@ export default AttachFileScreen = ({ navigation }) => {
                                 <Text>Upload Selfie</Text>
                             </TouchableOpacity>
                         )} */}
+                        <Picker
+                            selectedValue={selectedValue}
+                            onValueChange={handleValueChange}
+                            style={{ borderWidth: 1, borderRadius: 20, borderColor: '#fff', marginBottom: 5, color: 'white' }}
+                        >
+                            <Picker.Item label="Choose ID Type" />
+                            {ids?.map((value, k) => (
+                                <Picker.Item key={k} label={value.title} value={value.title} />
+                            ))}
+                        </Picker>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Checkbox
                                 status={checked ? 'checked' : 'unchecked'}
