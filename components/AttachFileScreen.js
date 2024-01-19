@@ -193,6 +193,9 @@ export default AttachFileScreen = ({ navigation }) => {
                                 <Picker.Item key={k} label={value.title} value={value.title} />
                             ))}
                         </Picker>
+                        {selectedValue == null && (
+                            <Text style={{color: 'white', marginVertical: 5, fontSize: 12, alignSelf: 'center'}}>Please Select ID Type</Text>
+                        )}
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Checkbox
                                 status={checked ? 'checked' : 'unchecked'}
@@ -209,7 +212,7 @@ export default AttachFileScreen = ({ navigation }) => {
                     mode="contained"
                     style={{ bottom: '20%', width: 200, backgroundColor: '#F78900', marginTop: 20, alignSelf: 'center', borderWidth: 2, borderColor: '#fff' }}
                     textColor="#fff"
-                    onPress={() => handleSubmit()}
+                    onPress={() => selectedValue == null?false:handleSubmit()}
                 >
                     SUBMIT
                 </Button>
@@ -217,7 +220,7 @@ export default AttachFileScreen = ({ navigation }) => {
                 <Image source={require('../assets/wave2.png')} style={styles.footerImage} />
             </View>
             <Dialog visible={visible} onDismiss={hideDialog}>
-                <Dialog.Title>Alert Message</Dialog.Title>
+                <Dialog.Title>Message</Dialog.Title>
                 <Dialog.Content>
                     <Text variant="bodyMedium">{message}</Text>
                 </Dialog.Content>
