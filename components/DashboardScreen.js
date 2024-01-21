@@ -7,6 +7,7 @@ import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { RNCamera } from 'react-native-camera';
+import NetInfo from '@react-native-community/netinfo';
 
 const DashboardScreen = ({ navigation }) => {
     const [token, setUserToken] = useState('');
@@ -30,6 +31,9 @@ const DashboardScreen = ({ navigation }) => {
     //Modal Notification
     const showModalNotif = () => setVisibleModal(true);
     const hideModalNotif = () => setVisibleModal(false);
+    //
+    const [connectionType, setConnectionType] = useState('unknown');
+    const [isConnected, setIsConnected] = useState(true);
     const takePicture = async () => {
         if (cameraRef.current) {
             const options = { quality: 0.5, base64: true };
@@ -131,6 +135,25 @@ const DashboardScreen = ({ navigation }) => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener((state) => {
+            console.log('Connection type:', state.type);
+            console.log('Is connected?', state.isConnected);
+
+            setConnectionType(state.type);
+            setIsConnected(state.isConnected);
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+    const isSlowConnection = () => {
+        // Customize this function based on your criteria for a slow connection
+        return connectionType === 'cellular' && !isConnected;
+    };
 
     const stations = () => {
         if (token != '') {

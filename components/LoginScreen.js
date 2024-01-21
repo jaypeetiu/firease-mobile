@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Provider as PaperProvider, Title } from 'react-native-paper';
+import { Dialog, Provider as PaperProvider, Text, Title } from 'react-native-paper';
 import { Button } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
@@ -13,6 +13,13 @@ const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
+    const [message, setMessage] = useState('');
+    const [visible, setVisible] = useState(false);
+
+    const hideDialog = () => {
+        setVisible(false);
+        navigation.navigate('Login');
+    };
 
     async function fetchData() {
         const value = AsyncStorage.getItem('userToken');
@@ -54,6 +61,8 @@ const LoginScreen = ({ navigation }) => {
                     console.error("Response data:", error.response.data);
                     console.error("Response status:", error.response.status);
                     console.error("Response headers:", error.response.headers);
+                    setMessage(error.response.data.message);
+                    setVisible(true);
                 } else if (error.request) {
                     // The request was made but no response was received
                     console.error("No response received, check your network connection.");
@@ -102,6 +111,15 @@ const LoginScreen = ({ navigation }) => {
                     </Button>
                 </View>
             </PaperProvider>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+                <Dialog.Title>Message</Dialog.Title>
+                <Dialog.Content>
+                    <Text variant="bodyMedium">{message}</Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                    <Button onPress={hideDialog}>Done</Button>
+                </Dialog.Actions>
+            </Dialog>
         </View>
     );
 };
