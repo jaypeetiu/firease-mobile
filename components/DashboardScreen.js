@@ -363,9 +363,6 @@ const DashboardScreen = ({ navigation }) => {
                         </Portal>
                         <Portal>
                             <Modal visible={visibleModal} onDismiss={hideModalNotif} contentContainerStyle={{ padding: 20, backgroundColor: '#F78900', borderRadius: 10, marginHorizontal: 20 }}>
-                                <Text style={{ alignSelf: 'baseline', paddingBottom: 20, fontWeight: 'bold' }}>
-                                    Hello, we received a notification that you need us, they are on their way now.
-                                </Text>
                                 <Text style={{ alignSelf: 'baseline', paddingBottom: 20, fontWeight: 'bold' }}>Pro tips: </Text>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={styles.bulletPoint}>{'\u2022'}</Text>
