@@ -38,6 +38,31 @@ export default UserSettingsScreen = ({ navigation }) => {
         });
     };
 
+    const handleDelete = () => {
+        const headers = { 'Authorization': `Bearer ${receivedValue.token}` };
+        axios.defaults.baseURL = 'https://firease.tech/api';
+        axios.post('/delete', null, {
+            headers
+        }).then((e) => {
+            console.log(e.data);
+            AsyncStorage.clear();
+            navigation.navigate('GetStarted');
+        }).catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+                console.error("Response headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("No response received, check your network connection.");
+            } else {
+                // Something happened in setting up the request
+                console.error("Error message:", error.message);
+            }
+        });
+    }
+
     const handleAbout = () => {
         navigation.navigate('About', {
             data: {
@@ -133,7 +158,7 @@ export default UserSettingsScreen = ({ navigation }) => {
                             borderColor: '#9B0103'
                         }}>Legal & Policies</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ flexDirection: 'row', marginVertical: 30 }}>
+                    <TouchableOpacity onPress={() => {handleDelete()}} style={{ flexDirection: 'row', marginVertical: 30 }}>
                         <Image
                             source={require('../assets/delete.png')}
                             style={{ backgroundColor: '#fff', alignSelf: 'center', margin: 10, marginHorizontal: 30, marginBottom: 5 }}
