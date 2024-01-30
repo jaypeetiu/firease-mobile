@@ -15,6 +15,7 @@ const LoginScreen = ({ navigation }) => {
     const [remember, setRemember] = useState(false);
     const [message, setMessage] = useState('');
     const [visible, setVisible] = useState(false);
+    const [token, setToken] = useState('');
 
     const hideDialog = () => {
         setVisible(false);
@@ -22,7 +23,11 @@ const LoginScreen = ({ navigation }) => {
     };
 
     async function fetchData() {
-        const value = AsyncStorage.getItem('userToken');
+        const value = await AsyncStorage.getItem('userToken');
+        const valueToken = await AsyncStorage.getItem('deviceToken');
+        if(valueToken!=null){
+            setToken(valueToken)
+        }
         if (value != null) {
             navigation.navigate('MainApp');
         }
@@ -30,7 +35,7 @@ const LoginScreen = ({ navigation }) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [token]);
 
     const handleLogin = () => {
         const formData = new FormData();
@@ -46,31 +51,31 @@ const LoginScreen = ({ navigation }) => {
             axios.post('auth/login', {
                 'email': email,
                 'password': password,
-                'remember_me': remember
+                'remember_me': remember,
+                'device_token': token
             }).then((e) => {
-                console.log(e.data);
-                setLocalStorageItem("userToken", e.data.token, 9999);
-                setLocalStorageItem("userID", JSON.stringify(e.data.user.id), 9999);
-                setLocalStorageItem("user", e.data.user.name, 9999);
-                setLocalStorageItem("userAvatar", e.data.user.avatar, 9999);
-                setLocalStorageItem("userPhone", e.data.user.phone_number?e.data.user.phone_number:'No Phone number', 9999);
-                navigation.navigate('MainApp');
-            }).catch((error) => {
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    console.error("Response data:", error.response.data);
-                    console.error("Response status:", error.response.status);
-                    console.error("Response headers:", error.response.headers);
-                    setMessage(error.response.data.message);
-                    setVisible(true);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    console.error("No response received, check your network connection.");
-                } else {
-                    // Something happened in setting up the request
-                    console.error("Error message:", error.message);
-                }
-            });
+                    setLocalStorageItem("userToken", e.data.token, 9999);
+                    setLocalStorageItem("userID", JSON.stringify(e.data.user.id), 9999);
+                    setLocalStorageItem("user", e.data.user.name, 9999);
+                    setLocalStorageItem("userAvatar", e.data.user.avatar, 9999);
+                    setLocalStorageItem("userPhone", e.data.user.phone_number ? e.data.user.phone_number : 'No Phone number', 9999);
+                    navigation.navigate('MainApp');
+                }).catch((error) => {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        console.error("Response data:", error.response.data);
+                        console.error("Response status:", error.response.status);
+                        console.error("Response headers:", error.response.headers);
+                        setMessage(error.response.data.message);
+                        setVisible(true);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        console.error("No response received, check your network connection.");
+                    } else {
+                        // Something happened in setting up the request
+                        console.error("Error message:", error.message);
+                    }
+                });
         } catch (error) {
             console.log(error);
         }

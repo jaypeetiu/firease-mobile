@@ -49,17 +49,28 @@ export default FireSafetyScreen = ({ navigation }) => {
         navigation.navigate('Guidelines');
     };
 
+    const handlePreview = (id) => {
+        navigation.navigate('Previews', {
+            data: {
+                'token': receivedValue.token,
+                'id': id,
+            }
+        });
+    }
+
     return (
         <View style={{ backgroundColor: '#000', height: '100%' }}>
             <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#9B0103', padding: 15, paddingTop: 30 }}>FIRE SAFETY TIPS</Text>
             {safety != '' ? safety?.map((value) => (
-                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Image source={{ uri: value.image }} style={{ width: '30%', height: 100, margin: 10 }} />
-                    <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
-                        <Text style={{ fontSize: 24, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '70%' }}>{value.title}</Text>
-                        <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '70%' }}>{value.shortdescription}</Text>
+                <TouchableOpacity onPress={() => { handlePreview(value.id) }}>
+                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Image source={{ uri: value.image }} style={{ width: '30%', height: 100, margin: 10 }} />
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+                            <Text style={{ fontSize: 24, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '70%' }}>{value.title}</Text>
+                            <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '70%' }}>{value.shortdescription}</Text>
+                        </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             )) : <Text style={{ fontSize: 16, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'center' }}>No Safety Tips Available</Text>
             }
             {/* <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
