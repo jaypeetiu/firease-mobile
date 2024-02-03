@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import react, { useEffect, useState } from "react";
-import { Image, ScrollView, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";
 import { useRoute } from '@react-navigation/native';
@@ -49,11 +49,16 @@ export default FireSafetyScreen = ({ navigation }) => {
         navigation.navigate('Guidelines');
     };
 
-    const handlePreview = (id) => {
-        navigation.navigate('Previews', {
+    const handlePreview = (id, title, image, sdescription, description) => {
+        console.log(id);
+        navigation.navigate('SafetyPreview', {
             data: {
                 'token': receivedValue.token,
                 'id': id,
+                'title': title,
+                'image': image,
+                'shortdescription': sdescription,
+                'description': description,
             }
         });
     }
@@ -62,7 +67,7 @@ export default FireSafetyScreen = ({ navigation }) => {
         <View style={{ backgroundColor: '#000', height: '100%' }}>
             <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#9B0103', padding: 15, paddingTop: 30 }}>FIRE SAFETY TIPS</Text>
             {safety != '' ? safety?.map((value) => (
-                <TouchableOpacity onPress={() => { handlePreview(value.id) }}>
+                <TouchableOpacity key={value.id} onPress={() => { handlePreview(value.id, value.title, value.image, value.shortdescription, value.description) }}>
                     <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Image source={{ uri: value.image }} style={{ width: '30%', height: 100, margin: 10 }} />
                         <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%' }}>

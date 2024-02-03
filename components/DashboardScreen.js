@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Image, ActivityIndicator, Alert } from 'react-native';
 import { Avatar, Button, Modal, PaperProvider, Portal, Surface, Text } from "react-native-paper";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
@@ -41,11 +41,16 @@ const DashboardScreen = ({ navigation }) => {
             setCapturedImage(data);
         }
     };
+    const [nearestStation, setNearestStation] = useState(null);
+    const [userLatitude, setUserLatitude] = useState();
+    const [userLongitude, setUserLongitude] = useState();
 
-    Geolocation.getCurrentPosition(
+    const getLocation = Geolocation.getCurrentPosition(
         position => {
             console.log('Current position:', position);
             // setLoading(true);
+            setUserLatitude(position.coords.latitude);
+            setUserLongitude(position.coords.longitude);
             axios.get(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCYxHTd4H5yAuZ3K6_MT1DuJ9XvDVhNTQs`
             ).then(response => {
@@ -77,7 +82,7 @@ const DashboardScreen = ({ navigation }) => {
             formData.append('address', address);
             formData.append('user_id', userID);
             formData.append('vehicle_id', 1);
-            formData.append('station_id', 1);//changeable
+            formData.append('station_id', nearestStation);//changeable
 
             axios.defaults.baseURL = 'https://firease.tech/api';
             axios.defaults.headers.common = {
@@ -166,8 +171,8 @@ const DashboardScreen = ({ navigation }) => {
             axios.get('stations', {
                 headers
             }).then((e) => {
-                console.log(e.data.stations);
                 setLocations(e.data.stations);
+                getLocation
             }).catch((error) => {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -199,7 +204,6 @@ const DashboardScreen = ({ navigation }) => {
                 headers
             }).then((e) => {
                 setBadge(e.data.badge);
-                // e.data.badge > 2 ? setBadge('Good Samaritan') : null;
             }).catch((error) => {
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -224,32 +228,6 @@ const DashboardScreen = ({ navigation }) => {
         stations();
     }, []);
 
-    const handleLogout = () => {
-        const headers = { 'Authorization': `Bearer ${token}` };
-        axios.defaults.baseURL = 'https://firease.tech/api';
-        axios.post('/auth/logout', null, {
-            headers
-        }).then((e) => {
-            console.log(e.data);
-            AsyncStorage.clear();
-            navigation.navigate('GetStarted');
-        }).catch((error) => {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                console.error("Response data:", error.response.data);
-                console.error("Response status:", error.response.status);
-                console.error("Response headers:", error.response.headers);
-                AsyncStorage.clear();
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.error("No response received, check your network connection.");
-            } else {
-                // Something happened in setting up the request
-                console.error("Error message:", error.message);
-            }
-        });
-    };
-
     const handleMarkerPress = (marker) => {
         console.log(`Marker ${marker.id} pressed!`);
         // Add your custom logic for handling marker press
@@ -258,14 +236,6 @@ const DashboardScreen = ({ navigation }) => {
     const handleCall = () => {
         Linking.openURL(phoneNumber);
     };
-
-    // const takePicture = async (camera) => {
-    //     const options = { quality: 0.5, base64: true };
-    //     const data = await camera.takePictureAsync(options);
-    //     //  eslint-disable-next-line
-    //     console.log(data.uri);
-    //     setCapturedImage(data);
-    // };
 
     const PendingView = () => (
         <View
@@ -282,6 +252,42 @@ const DashboardScreen = ({ navigation }) => {
 
     const handleCamera = () => {
         setCam(true);
+    }
+
+    useEffect(() => {
+        if (locations && locations.length > 0) {
+            const userLocation = { latitude: userLatitude, longitude: userLongitude };
+
+            const distances = locations.map((marker) => {
+                const stationLocation = { latitude: JSON.parse(marker.lat), longitude: JSON.parse(marker.lang) };
+                const distance = haversine(userLocation, stationLocation);
+                return { id: marker.id, distance };
+            });
+
+            const nearest = distances.reduce((min, current) => (current.distance < min.distance ? current : min), distances[0]);
+
+            setNearestStation(JSON.stringify(nearest.id));
+        }
+    }, [locations, userLatitude, userLongitude]);
+
+    const haversine = (coord1, coord2) => {
+        const R = 6371; // Earth radius in kilometers
+        const dLat = toRadians(coord2.latitude - coord1.latitude);
+        const dLon = toRadians(coord2.longitude - coord1.longitude);
+
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(coord1.latitude)) * Math.cos(toRadians(coord2.latitude)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+
+        return distance;
+    }
+
+    // Convert degrees to radians
+    const toRadians = (degrees) => {
+        return (degrees * Math.PI) / 180;
     }
 
     return (

@@ -27,6 +27,8 @@ import PushNotification, { Importance } from "react-native-push-notification";
 import messaging from '@react-native-firebase/messaging';
 import { setLocalStorageItem } from './utils/setLocalStorageItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SafetyPreview from './components/SafetyPreview';
+import AidPreview from './components/AidPreview';
 
 const Stack = createStackNavigator();
 
@@ -139,104 +141,104 @@ export default function App() {
   //   });
   // }, []);
 
-  useEffect(() => {
-    if (requestUserPermission()) {
-      //return fcm token for device
-      messaging().getToken().then((token) => {
-        console.log(JSON.stringify(token));
-        AsyncStorage.setItem("deviceToken", token);
-      })
-    } else {
-      console.log("failed to get token")
-    }
+  // useEffect(() => {
+  if (requestUserPermission()) {
+    //return fcm token for device
+    messaging().getToken().then((token) => {
+      console.log(JSON.stringify(token));
+      AsyncStorage.setItem("deviceToken", token);
+    })
+  } else {
+    console.log("failed to get token")
+  }
 
-    PushNotification.createChannel(
-      {
-        channelId: "default", // (required)
-        channelName: "firease", // (required)
-        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-        playSound: true, // (optional) default: true
-        // soundName: "alarm.mp3", // (optional) See `soundName` parameter of `localNotification` function
-        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-      },
-      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  PushNotification.createChannel(
+    {
+      channelId: "default", // (required)
+      channelName: "firease", // (required)
+      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+      playSound: true, // (optional) default: true
+      // soundName: "alarm.mp3", // (optional) See `soundName` parameter of `localNotification` function
+      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+      vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    },
+    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
+
+  // Check whether an initial notification is available
+  messaging()
+    .getInitialNotification()
+    .then(async (remoteMessage) => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from quit state:',
+          remoteMessage.notification,
+        );
+      }
+    });
+  // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+  messaging().onNotificationOpenedApp(async (remoteMessage) => {
+    console.log(
+      'Notification caused app to open from background state:',
+      remoteMessage.notification,
     );
+    // console.log(remoteMessage.data.url);
+    // Linking.openURL(remoteMessage.data.url);
+  });
 
-    // Check whether an initial notification is available
-    messaging()
-      .getInitialNotification()
-      .then(async (remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
-        }
-      });
-    // Assume a message-notification contains a "type" property in the data payload of the screen to open
-
-    messaging().onNotificationOpenedApp(async (remoteMessage) => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-      // console.log(remoteMessage.data.url);
-      // Linking.openURL(remoteMessage.data.url);
+  // Register background handler
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+    PushNotification.localNotification({
+      channelId: 'default',
+      vibrate: true,
+      vibration: 300,
+      playSound: true,
+      // soundName: "alarm.mp3",
+      importance: 'high',
+      invokeApp: true,
+      allowWhileIdle: true,
+      priority: 'high',
+      visibility: 'public',
+      /* Android Only Properties */
+      title: remoteMessage.notification.title, // (optional)
+      message: remoteMessage.notification.body, // (required)
+      invokeApp: true,
+      // actions: ["Yes", "No"],
+      color: "red",
+      bigText: remoteMessage.notification.body, // (optional) default: "message" prop
+      // subText: remoteMessage.notification.body, // (optional) default: none
     });
+  });
 
-    // Register background handler
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-      PushNotification.localNotification({
-        channelId: 'default',
-        vibrate: true,
-        vibration: 300,
-        playSound: true,
-        // soundName: "alarm.mp3",
-        importance: 'high',
-        invokeApp: true,
-        allowWhileIdle: true,
-        priority: 'high',
-        visibility: 'public',
-        /* Android Only Properties */
-        title: remoteMessage.notification.title, // (optional)
-        message: remoteMessage.notification.body, // (required)
-        invokeApp: true,
-        // actions: ["Yes", "No"],
-        color: "red",
-        bigText: remoteMessage.notification.body, // (optional) default: "message" prop
-        // subText: remoteMessage.notification.body, // (optional) default: none
-      });
+  messaging().onMessage(async remoteMessage => {
+    console.log('Message handled in the foreground!', remoteMessage);
+    PushNotification.localNotification({
+      channelId: 'default',
+      vibrate: true,
+      vibration: 300,
+      playSound: true,
+      // soundName: "alarm.mp3",
+      importance: 'high',
+      invokeApp: true,
+      allowWhileIdle: true,
+      priority: 'high',
+      visibility: 'public',
+      /* Android Only Properties */
+      title: remoteMessage.notification.title, // (optional)
+      message: remoteMessage.notification.body, // (required)
+      invokeApp: true,
+      // actions: ["Yes", "No"],
+      color: "red",
+      bigText: remoteMessage.notification.body, // (optional) default: "message" prop
+      // subText: remoteMessage.notification.body, // (optional) default: none
     });
+    Alert.alert('Firease', remoteMessage.notification.title + '\n' + remoteMessage.notification.body);
+  });
 
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('Message handled in the foreground!', remoteMessage);
-      PushNotification.localNotification({
-        channelId: 'default',
-        vibrate: true,
-        vibration: 300,
-        playSound: true,
-        // soundName: "alarm.mp3",
-        importance: 'high',
-        invokeApp: true,
-        allowWhileIdle: true,
-        priority: 'high',
-        visibility: 'public',
-        /* Android Only Properties */
-        title: remoteMessage.notification.title, // (optional)
-        message: remoteMessage.notification.body, // (required)
-        invokeApp: true,
-        // actions: ["Yes", "No"],
-        color: "red",
-        bigText: remoteMessage.notification.body, // (optional) default: "message" prop
-        // subText: remoteMessage.notification.body, // (optional) default: none
-      });
-      Alert.alert('Firease', remoteMessage.notification.title + '\n' + remoteMessage.notification.body);
-    });
-
-    return unsubscribe;
-  }, []);
+  // return unsubscribe;
+  // }, []);
 
   async function requestLocationPermission() {
     try {
@@ -286,6 +288,8 @@ export default function App() {
         <Stack.Screen name="Legal" component={LegalScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Help" component={HelpScreen} options={{ headerShown: false }} />
         <Stack.Screen name="History" component={HistoryScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="SafetyPreview" component={SafetyPreview} options={{ headerShown: false }} />
+        <Stack.Screen name="AidPreview" component={AidPreview} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

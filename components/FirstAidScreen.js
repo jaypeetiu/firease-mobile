@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import react, { useEffect, useState } from "react";
-import { Image, ScrollView, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { Avatar, Button, Text } from "react-native-paper";
 import { Appbar } from "react-native-paper";
 import { useRoute } from '@react-navigation/native';
@@ -40,7 +40,7 @@ export default FirstAidScreen = ({ navigation }) => {
         });
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         handleAid();
     }, []);
 
@@ -48,18 +48,34 @@ export default FirstAidScreen = ({ navigation }) => {
         navigation.navigate('Guidelines');
     };
 
+    const handlePreview = (id, title, image, sdescription, description) => {
+        console.log(id);
+        navigation.navigate('AidPreview', {
+            data: {
+                'token': receivedValue.token,
+                'id': id,
+                'title': title,
+                'image': image,
+                'shortdescription': sdescription,
+                'description': description,
+            }
+        });
+    }
+
     return (
         <View style={{ backgroundColor: '#000', height: '100%' }}>
             <ScrollView style={{ flex: 1 }}>
                 <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#9B0103', padding: 15, paddingTop: 30 }}>FIRST AID TIPS</Text>
-                {datas != '' ?datas?.map((value) => (
-                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Image source={{ uri: value.image }} style={{ width: '30%', height: 100, margin: 10 }} />
-                        <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
-                            <Text style={{ fontSize: 24, fontWeight: '700', color: '#FFFF', padding: 10, textAlign: 'left', width: '70%' }}>{value.title}</Text>
-                            <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '70%' }}>{value.shortdescription}</Text>
+                {datas != '' ? datas?.map((value) => (
+                    <TouchableOpacity key={value.id} onPress={() => { handlePreview(value.id, value.title, value.image, value.shortdescription, value.description) }}>
+                        <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Image source={{ uri: value.image }} style={{ width: '30%', height: 100, margin: 10 }} />
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+                                <Text style={{ fontSize: 24, fontWeight: '700', color: '#FFFF', padding: 10, textAlign: 'left', width: '70%' }}>{value.title}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'left', width: '70%' }}>{value.shortdescription}</Text>
+                            </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 )) : <Text style={{ fontSize: 16, fontWeight: '700', color: '#9B0103', padding: 10, textAlign: 'center' }}>No Aid Tips Available</Text>
                 }
                 {/* <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
