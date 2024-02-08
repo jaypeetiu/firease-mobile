@@ -53,7 +53,7 @@ export default ProfileScreen = ({ navigation }) => {
                     name: 'selfie.jpg',
                 });
                 try {
-                    axios.defaults.baseURL = 'https://firease.tech/api';
+                    axios.defaults.baseURL = 'https://fireasecdo-ffdead396a7d.herokuapp.com/api';
                     axios.defaults.headers.common = {
                         'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRF-TOKEN': window.csrf_token,

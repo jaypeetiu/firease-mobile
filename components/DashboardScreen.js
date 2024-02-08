@@ -51,6 +51,7 @@ const DashboardScreen = ({ navigation }) => {
             // setLoading(true);
             setUserLatitude(position.coords.latitude);
             setUserLongitude(position.coords.longitude);
+            setLoading(true);
             axios.get(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyCYxHTd4H5yAuZ3K6_MT1DuJ9XvDVhNTQs`
             ).then(response => {
@@ -58,6 +59,7 @@ const DashboardScreen = ({ navigation }) => {
                 // if (firstAddress) {
                 setAddress(firstAddress.formatted_address);
                 // }
+                setLoading(false);
             }).catch(error => console.error('Error fetching address:', error));
             // console.log(address);
             // setLoading(false);
@@ -84,7 +86,7 @@ const DashboardScreen = ({ navigation }) => {
             formData.append('vehicle_id', 1);
             formData.append('station_id', nearestStation);//changeable
 
-            axios.defaults.baseURL = 'https://firease.tech/api';
+            axios.defaults.baseURL = 'https://fireasecdo-ffdead396a7d.herokuapp.com/api';
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': window.csrf_token,
@@ -163,7 +165,7 @@ const DashboardScreen = ({ navigation }) => {
     const stations = () => {
         if (token != '') {
             const headers = { 'Authorization': `Bearer ${token}` };
-            axios.defaults.baseURL = 'https://firease.tech/api';
+            axios.defaults.baseURL = 'https://fireasecdo-ffdead396a7d.herokuapp.com/api';
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': window.csrf_token,
@@ -195,7 +197,7 @@ const DashboardScreen = ({ navigation }) => {
     const userbadge = () => {
         if (token != '') {
             const headers = { 'Authorization': `Bearer ${token}` };
-            axios.defaults.baseURL = 'https://firease.tech/api';
+            axios.defaults.baseURL = 'https://fireasecdo-ffdead396a7d.herokuapp.com/api';
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': window.csrf_token,

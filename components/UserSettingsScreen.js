@@ -14,7 +14,7 @@ export default UserSettingsScreen = ({ navigation }) => {
 
     const handleLogout = () => {
         const headers = { 'Authorization': `Bearer ${receivedValue.token}` };
-        axios.defaults.baseURL = 'https://firease.tech/api';
+        axios.defaults.baseURL = 'https://fireasecdo-ffdead396a7d.herokuapp.com/api';
         axios.post('/auth/logout', null, {
             headers
         }).then((e) => {
@@ -40,7 +40,7 @@ export default UserSettingsScreen = ({ navigation }) => {
 
     const handleDelete = () => {
         const headers = { 'Authorization': `Bearer ${receivedValue.token}` };
-        axios.defaults.baseURL = 'https://firease.tech/api';
+        axios.defaults.baseURL = 'https://fireasecdo-ffdead396a7d.herokuapp.com/api';
         axios.post('/delete', null, {
             headers
         }).then((e) => {
